@@ -34,6 +34,7 @@ $third: #e42320;
 * {
   margin: 0;
   padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
@@ -41,13 +42,8 @@ body {
   font-family: Arial, sans-serif;
 }
 
-header {
-  background: black;
-  color: $primary;
-  display: flex;
-  align-items: center;
-  padding: 10px 20px;
-  justify-content: space-between;
+.btn-danger {
+  background-color: $fourth;
 }
 
 .items {
@@ -78,16 +74,6 @@ input {
   border: none;
   outline: none;
   width: 400px;
-}
-
-#carouselExampleDark {
-  width: 100%;
-
-  .carousel-indicators {
-    .button {
-      color: $primary;
-    }
-  }
 }
 
 .category-section {
@@ -152,4 +138,10 @@ section {
   border-radius: 10px;
   padding: 3px;
   float: right;
+}
+
+
+
+footer{
+
 }
