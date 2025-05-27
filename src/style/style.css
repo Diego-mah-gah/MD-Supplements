@@ -28,6 +28,9 @@ header {
   margin-left: 30%;
   position: relative;
   padding: 0 5px;
+  .icon-button{
+    width:100%;    
+  }
 }
 
 .cart-shop img {
@@ -146,5 +149,6 @@ section {
   padding: 3px;
   float: right;
 }
+
 
 /*# sourceMappingURL=style.css.map */

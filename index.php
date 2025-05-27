@@ -19,9 +19,17 @@
             </a>
         </div>
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="O que você está procurando?" oninput="searchProduct()">
+            <input type="text" id="searchInput" placeholder="O que você está procurando?" oninput="searchProduct(document.getElementById(onclick='searchInput'.value({ $_GET})));">
         </div>
         <div class="cart-shop">
+            <i class="fa-solid fa-user" title="Login">
+                <a href="" class="icon-button">
+                    <i class="fas fa-bars">
+                        <img src="src/imgs/usuario.png" alt="usuario" title="login">
+                    </i>
+                </a>
+            </i>
+
             <i class="fa-solid fa-cart-shopping" title="Carrinho">
                 <a href="src/page/carrinho.php" class="icon-button">
                     <i class="fas fa-bars">
@@ -30,20 +38,28 @@
                 </a>
             </i>
         </div>
-        <div class="right-header">
-            <a href="https://wa.me/44999649804?text=Olá, eu gostaria de realizar um pedido" target="_blank" class="whatsapp-button">
-                <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
-            </a>
+        <div class="login-user">
+            <div class="login">
+                <form action="src/page/login.php" method="POST">
+                    <input type="email" name="email" required placeholder="Email"><br>
+                    <input type="password" name="senha" required placeholder="Senha"><br>
+                    <button type="submit">Entrar</button>
+                    <?php
+                    include 'src/page/login.php';
+                    ?>
+                </form>
+            </div>
+
         </div>
     </header>
 
-    <div id="carouselExampleDark" class="carousel carousel-dark slide"  style="height:100%;">
+    <div id="carouselExampleDark" class="carousel carousel-dark slide" style="height:600px;">
         <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="background-color:#715555; padding:2px 20px; border-radius: 100px 100px;"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2" style="background-color:#715555; padding:2px 20px; border-radius: 100px 100px;"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3" style="background-color:#715555; padding:2px 20px; border-radius: 100px 100px;"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="background-color:bisque; padding:2px 20px; border-radius: 100px 100px;"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2" style="background-color:bisque; padding:2px 20px; border-radius: 100px 100px;"></button>
+            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3" style="background-color:bisque; padding:2px 20px; border-radius: 100px 100px;"></button>
         </div>
-        <div class="carousel-inner" id="carousel-img">
+        <div class="carousel-inner" id="carousel-img" style="height: 600px;">
             <div class="carousel-item active" data-bs-interval="10000">
                 <img src="src/imgs/leostronda1.jpg" class="d-block w-100" alt="whey Monstro">
                 <div class="carousel-caption d-none d-md-block">
@@ -70,16 +86,21 @@
             </div>
 
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+        <button class="carousel-control-prev" type="button" style="background-color:blueviolet; padding:2px 20px; border-radius: 100px 100px;height:60px;margin:auto;" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next" style="background-color:blueviolet; padding:2px 20px; border-radius: 100px 100px;height:60px;margin:auto;">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
     </div>
 
+    <div class="right-header">
+        <a href="https://wa.me/44999649804?text=Olá, eu gostaria de realizar um pedido" target="_blank" class="whatsapp-button">
+            <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
+        </a>
+    </div>
 
     <div class="category-section">
         <a class="category" href="src/page/creatina.php" style="text-decoration: none;">
