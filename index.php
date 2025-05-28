@@ -49,6 +49,9 @@
                             <input type="password" name="senha" required placeholder="Senha" class="form-control mb-2">
                             <button type="submit" class="btn btn-primary w-100">Entrar / Cadastrar</button>
                         </form>
+                        <?php 
+                        include 'src/page/login.php';
+                        ?>
                     </div>
                 </div>
             </div>
