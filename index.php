@@ -22,44 +22,46 @@
             <input type="text" id="searchInput" placeholder="O que você está procurando?" oninput="searchProduct(document.getElementById(onclick='searchInput'.value({ $_GET})));">
         </div>
         <div class="cart-shop">
-            <i class="fa-solid fa-user" title="Login">
-                <a href="" class="icon-button">
-                    <i class="fas fa-bars">
-                        <img src="src/imgs/usuario.png" alt="usuario" title="login">
-                    </i>
-                </a>
-            </i>
 
-            <i class="fa-solid fa-cart-shopping" title="Carrinho">
-                <a href="src/page/carrinho.php" class="icon-button">
-                    <i class="fas fa-bars">
-                        <img src="src/imgs/carrinho.avif">
-                    </i>
-                </a>
-            </i>
+            <!----------------- Ícone do usuário com botão para abrir o modal ----------------->
+            <a href="#" class="icon-button" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <img src="src/imgs/usuario.png" alt="usuario" title="login">
+            </a>
+
+            <!----------------- Ícone do carrinho ----------------->
+            <a href="src/page/carrinho.php" class="icon-button">
+                <img src="src/imgs/carrinho.avif">
+            </a>
         </div>
-        <div class="login-user">
-            <div class="login">
-                <form action="src/page/login.php" method="POST">
-                    <input type="email" name="email" required placeholder="Email"><br>
-                    <input type="password" name="senha" required placeholder="Senha"><br>
-                    <button type="submit">Entrar</button>
-                    <?php
-                    include 'src/page/login.php';
-                    ?>
-                </form>
-            </div>
 
+
+        <!------------------ Modal de Login/Cadastro ----------------->
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="loginModalLabel">Entrar ou Cadastrar</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="src/page/login.php" method="POST">
+                            <input type="email" name="email" required placeholder="Email" class="form-control mb-2">
+                            <input type="password" name="senha" required placeholder="Senha" class="form-control mb-2">
+                            <button type="submit" class="btn btn-primary w-100">Entrar / Cadastrar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
-    <div id="carouselExampleDark" class="carousel carousel-dark slide" style="height:600px;">
+    <div id="carouselExampleDark" class="carousel carousel-dark slide">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="background-color:bisque; padding:2px 20px; border-radius: 100px 100px;"></button>
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2" style="background-color:bisque; padding:2px 20px; border-radius: 100px 100px;"></button>
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3" style="background-color:bisque; padding:2px 20px; border-radius: 100px 100px;"></button>
         </div>
-        <div class="carousel-inner" id="carousel-img" style="height: 600px;">
+        <div class="carousel-inner" id="carousel-img">
             <div class="carousel-item active" data-bs-interval="10000">
                 <img src="src/imgs/leostronda1.jpg" class="d-block w-100" alt="whey Monstro">
                 <div class="carousel-caption d-none d-md-block">
@@ -199,20 +201,26 @@
     <footer>
         <div class="footer">
             <div class="container">
-                <li>Politicas da Loja</li>
-                <li>Politicas de Cookies</li>
-                <li> Politicas de Privacidade</li>
+                <a href="">
+                    <li>Politicas da Loja</li>
+                </a>
+                <a href="">
+                    <li>Politicas de Cookies</li>
+                </a>
+                <a href="">
+                    <li> Politicas de Privacidade</li>
+                </a>
             </div>
-            <div class="form">
-                <form action="">
-                    <input type="email"><br>
-                    <input type="password"><br>
-                    <input type="text"><br>
-                    <input type="checkbox"><br>
-                    <input type="submit"><br>
-                    <button type="button">Enviar</button>
-                </form>
-            </div>
+        </div>
+        <div class="form">
+            <form action="">
+                <input type="email"><br>
+                <input type="password"><br>
+                <input type="text"><br>
+                <input type="checkbox"><br>
+                <input type="submit"><br>
+                <button type="button">Enviar</button>
+            </form>
         </div>
     </footer>
 
