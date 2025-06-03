@@ -8,12 +8,11 @@ if ($conn->connect_error) {
 }
 
 if (isset($_POST['email']) && isset($_POST['senha'])) {
-    $nome = $_POST['nome'];
+    $nome = $session_name(session_name($_POST['nome']));
     $email = $_POST['email'];
     $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
     $endereço = $_POST['endereco'];
     $telefone = $_POST['telefone'];
-    $idade = $_POST['idade'];
     $data_nascimento = $_POST['data_nascimento'];
     $id = $_SESSION['id'] ?? null;
 
@@ -31,7 +30,7 @@ if (isset($_POST['email']) && isset($_POST['senha'])) {
     } else {
         $sql = "INSERT INTO usuario (email, senha) VALUES (?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $email, $senha, $nome, $endereço, $telefone, $data_nascimento, $idade);
+        $stmt->bind_param("ss", $email, $senha, $nome, $endereço, $telefone, $data_nascimento);
         if ($stmt->execute()) {
             echo "Cadastro realizado com sucesso!";
         } else {
@@ -43,5 +42,6 @@ if (isset($_POST['email']) && isset($_POST['senha'])) {
 }
 
 
-$nomeAntigo = session_name('usuario');
+$nomeAntigo = new $session_name(session_name('usuario'));
 $conn->close();
+session_start();

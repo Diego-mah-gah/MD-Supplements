@@ -24,34 +24,17 @@
         <div class="cart-shop">
 
             <!----------------- Ícone do usuário com botão para abrir o modal ----------------->
-            <a href="login-page" class="icon-button" data-bs-toggle="modal" data-bs-target="#loginModal">
+            <a href="src/controller/login-page.php" class="icon-button">
                 <img src="src/model/imgs/usuario.png" alt="usuario" title="login">
             </a>
 
             <!----------------- Ícone do carrinho ----------------->
-            <a href="src/view/page/carrinho.php" class="icon-button">
+            <a href="src/view/carrinho.php" class="icon-button">
                 <img src="src/model/imgs/carrinho.avif">
             </a>
         </div>
 
     </header>
-
-    <main>
-         <?php
-
-        include 'src/view/produtos.php';
-
-        $pagina = $_GET["param"] ?? "home";
-
-        $pagina = "src/view/{$pagina}.php";
-        if (file_exists($pagina)) {
-            include $pagina;
-        } else {
-          "src/view/404.php";
-        }
-        ?>
-
-    </main>
 
     <div id="carouselExampleDark" class="carousel carousel-dark slide">
         <div class="carousel-indicators">
@@ -130,10 +113,19 @@
     <div class="best-sellers">
         <!-------------------------------- Produtos vão aqui ------------------------------>
 
-        <h2>Mais vendidos</h2>
+        <?php
+        include 'src/view/produtos.php';
 
-        
-        
+        $pagina = $_GET["param"] ?? "home";
+
+        $pagina = "src/view/{$pagina}.php";
+        if (file_exists($pagina)) {
+            include $pagina;
+        } else {
+            "src/view/404.php";
+        }
+        ?>
+
 
     </div>
 
