@@ -5,8 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>M&D Supplements</title>
-    <link rel="stylesheet" href="src/style/style.css" />
-    <link rel="shortcut icon" href="src/imgs/MD-LOGO.avif">
+    <link rel="stylesheet" href="src/model/style/style.css" />
+    <link rel="shortcut icon" href="src/model/imgs/MD-LOGO.avif">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </head>
@@ -14,8 +14,8 @@
 <body>
     <header class="header">
         <div class="left-header">
-            <a href="#home">
-                <img src="src/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
+            <a href="home">
+                <img src="src/model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
             </a>
         </div>
         <div class="search-box">
@@ -24,39 +24,34 @@
         <div class="cart-shop">
 
             <!----------------- Ícone do usuário com botão para abrir o modal ----------------->
-            <a href="#" class="icon-button" data-bs-toggle="modal" data-bs-target="#loginModal">
-                <img src="src/imgs/usuario.png" alt="usuario" title="login">
+            <a href="login-page" class="icon-button" data-bs-toggle="modal" data-bs-target="#loginModal">
+                <img src="src/model/imgs/usuario.png" alt="usuario" title="login">
             </a>
 
             <!----------------- Ícone do carrinho ----------------->
-            <a href="src/page/carrinho.php" class="icon-button">
-                <img src="src/imgs/carrinho.avif">
+            <a href="src/view/page/carrinho.php" class="icon-button">
+                <img src="src/model/imgs/carrinho.avif">
             </a>
         </div>
 
-
-        <!------------------ Modal de Login/Cadastro ----------------->
-        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="loginModalLabel">Entrar ou Cadastrar</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="src/page/login.php" method="POST">
-                            <input type="email" name="email" required placeholder="Email" class="form-control mb-2">
-                            <input type="password" name="senha" required placeholder="Senha" class="form-control mb-2">
-                            <button type="submit" class="btn btn-primary w-100">Entrar / Cadastrar</button>
-                        </form>
-                        <?php 
-                        include 'src/page/login.php';
-                        ?>
-                    </div>
-                </div>
-            </div>
-        </div>
     </header>
+
+    <main>
+         <?php
+
+        include 'src/view/produtos.php';
+
+        $pagina = $_GET["param"] ?? "home";
+
+        $pagina = "src/view/{$pagina}.php";
+        if (file_exists($pagina)) {
+            include $pagina;
+        } else {
+          "src/view/404.php";
+        }
+        ?>
+
+    </main>
 
     <div id="carouselExampleDark" class="carousel carousel-dark slide">
         <div class="carousel-indicators">
@@ -66,7 +61,7 @@
         </div>
         <div class="carousel-inner" id="carousel-img">
             <div class="carousel-item active" data-bs-interval="10000">
-                <img src="src/imgs/leostronda1.jpg" class="d-block w-100" alt="whey Monstro">
+                <img src="src/model/imgs/leostronda1.jpg" class="d-block w-100" alt="whey Monstro">
                 <div class="carousel-caption d-none d-md-block">
                     <h5 style="color:antiquewhite; background-color:rgba(139, 31, 29, 0.45);  margin:30% 0; position:sticky; border-radius: 30px; padding:20px;  ">
                         <strong>OS MELHORES SUPLEMENTOS DA CIDADE </strong>
@@ -74,7 +69,7 @@
                 </div>
             </div>
             <div class="carousel-item" data-bs-interval="2000">
-                <img src="src/imgs/creatina-bg.jpg" class="d-block w-100" alt="...">
+                <img src="src/model/imgs/creatina-bg.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5 style="color:antiquewhite; background-color:rgba(139, 31, 29, 0.45);  margin:30% 0; position:sticky; border-radius: 30px; padding:2%;">
                         <strong> SUPLEMENTOS PARA DESENVOLVIMENTO FÍSICO </strong>
@@ -82,7 +77,7 @@
                 </div>
             </div>
             <div class="carousel-item" data-bs-interval="2000">
-                <img src="src/imgs/leo-cozinha.jpg" class="d-block w-100" alt="...">
+                <img src="src/model/imgs/leo-cozinha.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5 style="color:antiquewhite; background-color:rgba(139, 31, 29, 0.45);  margin:30% 0; position:sticky; border-radius: 30px; padding:2%;">
                         <strong> PARA GANHO DE MASSA MAGRA </strong>
@@ -101,71 +96,45 @@
         </button>
     </div>
 
-    <div class="right-header">
+
+    <!------------------ Entrar em conversa whatsapp----------------->
+
+    <div class="right-header" id="wa-btn">
         <a href="https://wa.me/44999649804?text=Olá, eu gostaria de realizar um pedido" target="_blank" class="whatsapp-button">
             <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp">
         </a>
     </div>
 
+
+    <!-------------------- Ícones dos produtos (círculos) ----------------->
     <div class="category-section">
-        <a class="category" href="src/page/creatina.php" style="text-decoration: none;">
-            <img src="src/imgs/um-homem-musculoso-sem-camisa-usando-shorts-esportivos-e-pegando-proteina-em-po-de-um-fras.avif" alt="Creatina">
+        <a class="category" href="src/view/creatina.php" style="text-decoration: none;">
+            <img src="src/model/imgs/um-homem-musculoso-sem-camisa-usando-shorts-esportivos-e-pegando-proteina-em-po-de-um-fras.avif" alt="Creatina">
             <p>Creatina</p>
         </a>
-        <a class="category" href="src/page/whey.php" style="text-decoration: none;">
-            <img src="src/imgs/whey-protein-com-carboidrato.avif" alt="Whey Protein">
+        <a class="category" href="src/view/whey.php" style="text-decoration: none;">
+            <img src="src/model/imgs/whey-protein-com-carboidrato.avif" alt="Whey Protein">
             <p>Whey Protein</p>
         </a>
-        <a class="category" href="src/page/pre-treino.php" style="text-decoration: none;">
-            <img src="src/imgs/homem_atletico_sem_camisa_fazendo_exercicios_de_biceps_com_um_haltere_em_fundo_cinza_vinhe.avif" alt="Pré Treino">
+        <a class="category" href="src/view/pre-treino.php" style="text-decoration: none;">
+            <img src="src/model/imgs/homem_atletico_sem_camisa_fazendo_exercicios_de_biceps_com_um_haltere_em_fundo_cinza_vinhe.avif" alt="Pré Treino">
             <p>Pré Treino</p>
         </a>
-        <a class="category" href="src/page/emagrecedor.php" style="text-decoration: none;">
-            <img src="src/imgs/treino-para-perder-peso-1_edited.avif" alt="Emagrecedor">
+        <a class="category" href="src/view/emagrecedor.php" style="text-decoration: none;">
+            <img src="src/model/imgs/treino-para-perder-peso-1_edited.avif" alt="Emagrecedor">
             <p>Emagrecedor</p>
         </a>
     </div>
 
 
     <div class="best-sellers">
-        <h2>Mais vendidos</h2>
         <!-------------------------------- Produtos vão aqui ------------------------------>
-        <div class="productList">
-            <div class="listOfProducts">
-                <div class="container">
-                    <div class="row text-center">
-                        <div class="products col-sm-6 col-md-3">
-                            <a href="src/page/whey.php" style="text-decoration: none;">
-                                <img src="src/imgs/whey.avif" alt="Whey Protein" class="img-fluid" style="max-width: 80px;">
-                                <p>Whey</p>
-                                <button type="button" class="btn btn-danger" style="background-color:rgb(23, 29, 24); border-radius: 30px;">Adicionar ao Carrinho</button>
-                            </a>
-                        </div>
-                        <div class="products col-sm-6 col-md-3">
-                            <a href="src/page/creatina.php" style="text-decoration: none;">
-                                <img src="src/imgs/creatine.avif" alt="Creatina" class="img-fluid" style="max-width: 80px; ">
-                                <p>Creatina</p>
-                                <button type="button" class="btn btn-danger" style="background-color:rgb(23, 29, 24); border-radius: 30px;">Adicionar ao Carrinho</button>
-                            </a>
-                        </div>
-                        <div class="products col-sm-6 col-md-3">
-                            <a href="src/page/pre-treino.php" style="text-decoration: none;">
-                                <img src="src/imgs/pre-treino.avif" alt="Pré Treino" class="img-fluid" style="max-width: 80px;">
-                                <p>Pré-treino</p>
-                                <button type="button" class="btn btn-danger" style="background-color:rgb(23, 29, 24); border-radius: 30px;">Adicionar ao Carrinho</button>
-                            </a>
-                        </div>
-                        <div class="products col-sm-6 col-md-3">
-                            <a href="src/page/emagrecedor.php" style="text-decoration: none;">
-                                <img src="src/imgs/2-hot.avif" alt="Emagrecedor" class="img-fluid" style="max-width: 80px;">
-                                <p>Emagrecedor</p>
-                                <button type="button" class="btn btn-danger" style="background-color:rgb(23, 29, 24); border-radius: 30px;">Adicionar ao Carrinho</button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+        <h2>Mais vendidos</h2>
+
+        
+        
+
     </div>
 
 
