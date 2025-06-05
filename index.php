@@ -9,10 +9,23 @@
     <link rel="shortcut icon" href="src/model/imgs/MD-LOGO.avif">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+    <?php 
+    
+    if (isset($_GET["param"])) {
+        $pagina = "src/view/{$_GET["param"]}.php";
+        if (!file_exists($pagina)) {
+            header("Location: src/view/html-page/404.html");
+            exit();
+        }
+    }
+
+    ?>
+
 </head>
 
 <body>
-<header class="header">
+    <header class="header">
         <div class="left-header">
             <a href="home">
                 <img src="src/model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
@@ -24,12 +37,12 @@
         <div class="cart-shop">
 
             <!----------------- Ícone do usuário com botão para abrir o modal ----------------->
-            <a href="src/controller/login-page.php" class="icon-button">
+            <a href="src/view/html-page/login-page.html?param=login" class="icon-button">
                 <img src="src/model/imgs/usuario.png" alt="usuario" title="login">
             </a>
 
             <!----------------- Ícone do carrinho ----------------->
-            <a href="src/view/carrinho.php" class="icon-button">
+            <a href="param=carrinho" class="icon-button">
                 <img src="src/model/imgs/carrinho.avif">
             </a>
         </div>
@@ -119,10 +132,13 @@
         $pagina = $_GET["param"] ?? "home";
 
         $pagina = "src/view/{$pagina}.php";
+
+        if (isset($_GET['id']) && $_GET['id'] == 'produtos') {
+            include 'src/view/produtos.php';
+        }
+
         if (file_exists($pagina)) {
             include $pagina;
-        } else {
-            "src/view/404.php";
         }
         ?>
 
@@ -131,46 +147,46 @@
 
 
     <div class="container my-4"></div>
-        <div class="row g-3 justify-content-center text-center"  style="background-color: #be100d; width:auto; padding:10%; margin-top:60px; font-size:1.2rem; color:antiquewhite; border-radius: 10px;">
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="info-item d-flex flex-column align-items-center h-100">
-                    <img src="src/model/imgs/truck-fast.png" alt="fast-truck" style="width:48px; height:auto;">
-                    <div class="info-text mt-2">
-                        <strong>
-                            <p class="mb-0" style=>
-                                Paraná acima de R$ 399,99<br>
-                                Santa Catarina acima de R$ 599,99<br>
-                                São Paulo acima de R$ 599,99<br>
-                                Demais Regiões será cobrado frete
-                            </p>
-                        </strong>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="info-item d-flex flex-column align-items-center h-100">
-                    <img src="src/model/imgs/card-payment.png" alt="credit-card" style="width:48px; height:auto;">
-                    <p class="mt-2 mb-0" style=>
-                        <strong>
-                            Parcelamos suas compras em 3x sem juros
-                        </strong>
-                    </p>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-4">
-                <div class="info-item d-flex flex-column align-items-center h-100">
-                    <img src="src/model/imgs/locker.png" alt="locker" style="width:48px; height:auto;">
-                    <p class="mt-2 mb-0" style=>
-                        <strong>
-                            Site 100% seguro
-                        </strong>
-                    </p>
+    <div class="row g-3 justify-content-center text-center" style="background-color: #be100d; width:auto; padding:10%; margin-top:60px; font-size:1.2rem; color:antiquewhite; border-radius: 10px;">
+        <div class="col-12 col-sm-6 col-md-4">
+            <div class="info-item d-flex flex-column align-items-center h-100">
+                <img src="src/model/imgs/truck-fast.png" alt="fast-truck" style="width:48px; height:auto;">
+                <div class="info-text mt-2">
+                    <strong>
+                        <p class="mb-0" style=>
+                            Paraná acima de R$ 399,99<br>
+                            Santa Catarina acima de R$ 599,99<br>
+                            São Paulo acima de R$ 599,99<br>
+                            Demais Regiões será cobrado frete
+                        </p>
+                    </strong>
                 </div>
             </div>
         </div>
+        <div class="col-12 col-sm-6 col-md-4">
+            <div class="info-item d-flex flex-column align-items-center h-100">
+                <img src="src/model/imgs/card-payment.png" alt="credit-card" style="width:48px; height:auto;">
+                <p class="mt-2 mb-0" style=>
+                    <strong>
+                        Parcelamos suas compras em 3x sem juros
+                    </strong>
+                </p>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-md-4">
+            <div class="info-item d-flex flex-column align-items-center h-100">
+                <img src="src/model/imgs/locker.png" alt="locker" style="width:48px; height:auto;">
+                <p class="mt-2 mb-0" style=>
+                    <strong>
+                        Site 100% seguro
+                    </strong>
+                </p>
+            </div>
+        </div>
+    </div>
     </div>
     <footer>
-        <div class="footer">
+        <div class="footer me-2">
             <div class="container">
                 <a href="">
                     <li>Politicas da Loja</li>
@@ -183,20 +199,13 @@
                 </a>
             </div>
         </div>
-        <div class="form">
-            <form action="">
-                <input type="email"><br>
-                <input type="password"><br>
-                <input type="text"><br>
-                <input type="checkbox"><br>
-                <input type="submit"><br>
-                <button type="button">Enviar</button>
-            </form>
-        </div>
+        <?php
+        include 'src/view/footer-form.php';
+        ?>
     </footer>
 
     <script> </script>
-    <script src="src/controller/scripts/index.js"></script>
+
 </body>
 
 </html>

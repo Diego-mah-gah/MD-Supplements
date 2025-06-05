@@ -1,4 +1,4 @@
-    <div class="best-sellers">
+<div class="best-sellers">
         <!-------------------------------- Produtos vão aqui ------------------------------>
 
         <h2 class="mt-0">Mais vendidos</h2>
@@ -21,7 +21,11 @@
             <img src='src/imgs/{$produto['imagem']}' alt='{$produto['nome']}' style='width:auto; height:auto;'>
             <h3>{$produto['nome']}</h3>
             <p>R$ " . number_format($produto['preco'], 2, ',', '.') . "</p>
-            <a href='?param=produtos&id={$produto['nome']}' class='btn btn-primary'>Comprar</a>
+            <form method='post' action='?param=produtos'>
+                <input type='hidden' name='produto_nome' value='{$produto['nome']}'>
+
+                <button type='submit' name='add_to_cart' class='btn btn-primary'>Adicionar ao Carrinho</button>
+            </form>
         </div>
             </div>";
             }
