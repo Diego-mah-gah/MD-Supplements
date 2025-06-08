@@ -10,17 +10,4 @@
     ];
 
     // Adiciona ao carrinho se houver POST
-    session_start();
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
-        $produto_nome = $_POST['produto_nome'];
-        foreach ($produtos as $produto) {
-            if ($produto['nome'] === $produto_nome) {
-                $_SESSION['carrinho'][] = $produto;
-                break;
-            }
-        }
-        // Redireciona para evitar reenvio do formulário
-        header('Location: ' . $_SERVER['REQUEST_URI']);
-        exit();
-    }
 

@@ -10,8 +10,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 
-    <?php 
-    
+    <?php
+
     if (isset($_GET["param"])) {
         $pagina = "src/view/{$_GET["param"]}.php";
         if (!file_exists($pagina)) {
@@ -27,7 +27,7 @@
 <body>
     <header class="header">
         <div class="left-header">
-            <a href="home">
+            <a href="?home" id="home">
                 <img src="src/model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
             </a>
         </div>
@@ -37,12 +37,23 @@
         <div class="cart-shop">
 
             <!----------------- Ícone do usuário com botão para abrir o modal ----------------->
-            <a href="src/view/html-page/login-page.html?param=login" class="icon-button">
+            <a href="src/view/html-page/login-page.html?login" id="usuario" class="icon-button">
                 <img src="src/model/imgs/usuario.png" alt="usuario" title="login">
+                <?php
+
+                if (isset($_SESSION['usuario'])) {
+                    echo '<span class="user-name">' . htmlspecialchars($_SESSION['usuario']['nome']) . '</span>';
+                } elseif (isset($_SESSION['admin'])) {
+                    echo '<span class="user-name">' . htmlspecialchars($_SESSION['admin']['nome']) . '</span>';
+                } else {
+                    echo '<span class="user-name"></span>';
+                }
+
+                ?>
             </a>
 
             <!----------------- Ícone do carrinho ----------------->
-            <a href="param=carrinho" class="icon-button">
+            <a href="/carrinho" class="icon-button">
                 <img src="src/model/imgs/carrinho.avif">
             </a>
         </div>
@@ -104,19 +115,19 @@
 
     <!-------------------- Ícones dos produtos (círculos) ----------------->
     <div class="category-section">
-        <a class="category " href="src/view/creatina.php" style="text-decoration: none;">
+        <a class="category" href="/creatina" style="text-decoration: none;">
             <img src="src/model/imgs/um-homem-musculoso-sem-camisa-usando-shorts-esportivos-e-pegando-proteina-em-po-de-um-fras.avif" alt="Creatina">
             <p>Creatina</p>
         </a>
-        <a class="category" href="src/view/whey.php" style="text-decoration: none;">
+        <a class="category" href="/whey" style="text-decoration: none;">
             <img src="src/model/imgs/whey-protein-com-carboidrato.avif" alt="Whey Protein">
             <p>Whey Protein</p>
         </a>
-        <a class="category" href="src/view/pre-treino.php" style="text-decoration: none;">
+        <a class="category" href="/pre-treino" style="text-decoration: none;">
             <img src="src/model/imgs/homem_atletico_sem_camisa_fazendo_exercicios_de_biceps_com_um_haltere_em_fundo_cinza_vinhe.avif" alt="Pré Treino">
             <p>Pré Treino</p>
         </a>
-        <a class="category" href="src/view/emagrecedor.php" style="text-decoration: none;">
+        <a class="category" href="/emagrecedor" style="text-decoration: none;">
             <img src="src/model/imgs/treino-para-perder-peso-1_edited.avif" alt="Emagrecedor">
             <p>Emagrecedor</p>
         </a>
@@ -129,16 +140,34 @@
         <?php
         include 'src/view/produtos.php';
 
-        $pagina = $_GET["param"] ?? "home";
-
-        $pagina = "src/view/{$pagina}.php";
+        $param = isset($_GET["param"]) ? strtolower($_GET["param"]) : "home";
+        $pagina = "src/view/{$param}.php";
 
         if (isset($_GET['id']) && $_GET['id'] == 'produtos') {
             include 'src/view/produtos.php';
+            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
+                $produto_nome = $_POST['produto_nome'];
+                foreach ($produtos as $produto) {
+                    if ($produto['nome'] === $produto_nome) {
+                        $_SESSION['carrinho'][] = $produto;
+                        break;
+                    }
+                }
+                header('Location: ' . $_SERVER['REQUEST_URI']);
+                exit();
+            }
+        }
+
+        $paginas_validas = ['home', 'creatina', 'whey', 'pre-treino', 'emagrecedor', 'login', 'carrinho', 'profile'];
+        if (!in_array($param, $paginas_validas)) {
+            $pagina = "src/view/home.php";
         }
 
         if (file_exists($pagina)) {
             include $pagina;
+        } else {
+            header("Location: src/view/html-page/404.html");
+            exit();
         }
         ?>
 
@@ -186,22 +215,13 @@
     </div>
     </div>
     <footer>
-        <div class="footer me-2">
-            <div class="container">
-                <a href="">
-                    <li>Politicas da Loja</li>
-                </a>
-                <a href="">
-                    <li>Politicas de Cookies</li>
-                </a>
-                <a href="">
-                    <li> Politicas de Privacidade</li>
-                </a>
-            </div>
-        </div>
+
         <?php
+
         include 'src/view/footer-form.php';
+
         ?>
+
     </footer>
 
     <script> </script>
