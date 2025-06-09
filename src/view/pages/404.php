@@ -15,7 +15,7 @@
     if (isset($_GET["param"])) {
         $pagina = "src/view/{$_GET["param"]}.php";
         if (!file_exists($pagina)) {
-            header("Location: src/view/html-page/404.html");
+            header("Location: src/view/pages/404.php");
             exit();
         }
     }

@@ -1,3 +1,11 @@
+<?php 
+session_start();
+
+if (!isset($_SESSION['carrinho'])) {
+    $_SESSION['carrinho'] = [];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -12,13 +20,20 @@
 
     <?php
 
+    $param = isset($_GET["param"]) ? $_GET["param"] : "home";
+    
     if (isset($_GET["param"])) {
         $pagina = "src/view/{$_GET["param"]}.php";
         if (!file_exists($pagina)) {
-            header("Location: src/view/html-page/404.html");
+            header("Location: src/view/pages/404.php");
             exit();
         }
     }
+    
+    if($param == "Home"){
+        require_once 'src/view/index.php';
+    }
+
 
     ?>
 
@@ -27,7 +42,7 @@
 <body>
     <header class="header">
         <div class="left-header">
-            <a href="?home" id="home">
+            <a href="?param=home" id="home">
                 <img src="src/model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
             </a>
         </div>
@@ -37,28 +52,37 @@
         <div class="cart-shop">
 
             <!----------------- Ícone do usuário com botão para abrir o modal ----------------->
-            <a href="src/view/html-page/login-page.html?login" id="usuario" class="icon-button">
+            <a href="src/view/pages/login-page.php?login" id="usuario" class="icon-button">
                 <img src="src/model/imgs/usuario.png" alt="usuario" title="login">
                 <?php
 
                 if (isset($_SESSION['usuario'])) {
-                    echo '<span class="user-name">' . htmlspecialchars($_SESSION['usuario']['nome']) . '</span>';
-                } elseif (isset($_SESSION['admin'])) {
-                    echo '<span class="user-name">' . htmlspecialchars($_SESSION['admin']['nome']) . '</span>';
-                } else {
-                    echo '<span class="user-name"></span>';
+                    echo "<span class='username'>" . htmlspecialchars($_SESSION['usuario']['nome']) . "</span>";
                 }
+
 
                 ?>
             </a>
 
             <!----------------- Ícone do carrinho ----------------->
-            <a href="/carrinho" class="icon-button">
+            <a href="carrinho.php?carrinho" class="icon-button">
                 <img src="src/model/imgs/carrinho.avif">
             </a>
         </div>
 
     </header>
+
+    <main>
+        <?php
+
+        $param = isset($_GET["param"]) ?? "home";
+        $pagina = "src/view/{$param}.php";
+
+
+
+        ?>
+    </main>
+
 
     <div id="carouselExampleDark" class="carousel carousel-dark slide">
         <div class="carousel-indicators">
@@ -139,9 +163,6 @@
 
         <?php
         include 'src/view/produtos.php';
-
-        $param = isset($_GET["param"]) ? strtolower($_GET["param"]) : "home";
-        $pagina = "src/view/{$param}.php";
 
         if (isset($_GET['id']) && $_GET['id'] == 'produtos') {
             include 'src/view/produtos.php';
@@ -224,7 +245,7 @@
 
     </footer>
 
-    <script> </script>
+    <script src="src/controller/scripts/index.js"></script>
 
 </body>
 
