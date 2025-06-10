@@ -1,11 +1,3 @@
-<?php 
-session_start();
-
-if (!isset($_SESSION['carrinho'])) {
-    $_SESSION['carrinho'] = [];
-}
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -21,7 +13,7 @@ if (!isset($_SESSION['carrinho'])) {
     <?php
 
     $param = isset($_GET["param"]) ? $_GET["param"] : "home";
-    
+
     if (isset($_GET["param"])) {
         $pagina = "src/view/{$_GET["param"]}.php";
         if (!file_exists($pagina)) {
@@ -29,12 +21,6 @@ if (!isset($_SESSION['carrinho'])) {
             exit();
         }
     }
-    
-    if($param == "Home"){
-        require_once 'src/view/index.php';
-    }
-
-
     ?>
 
 </head>
@@ -42,7 +28,7 @@ if (!isset($_SESSION['carrinho'])) {
 <body>
     <header class="header">
         <div class="left-header">
-            <a href="?param=home" id="home">
+            <a href="?home" id="home">
                 <img src="src/model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
             </a>
         </div>
@@ -56,10 +42,8 @@ if (!isset($_SESSION['carrinho'])) {
                 <img src="src/model/imgs/usuario.png" alt="usuario" title="login">
                 <?php
 
-                if (isset($_SESSION['usuario'])) {
-                    echo "<span class='username'>" . htmlspecialchars($_SESSION['usuario']['nome']) . "</span>";
-                }
-
+                include 'src/view/verify-login.php';
+                session_start();
 
                 ?>
             </a>
@@ -179,7 +163,8 @@ if (!isset($_SESSION['carrinho'])) {
             }
         }
 
-        $paginas_validas = ['home', 'creatina', 'whey', 'pre-treino', 'emagrecedor', 'login', 'carrinho', 'profile'];
+        $paginas_validas = ['home', 'creatina', 'whey', 'pre-treino', 'emagrecedor', 'carrinho', 'login', 'cadastro', 'sobre', 'contato', 'produtos'];
+        $pagina = "src/view/{$param}.php";
         if (!in_array($param, $paginas_validas)) {
             $pagina = "src/view/home.php";
         }
