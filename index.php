@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -28,7 +32,7 @@
 <body>
     <header class="header">
         <div class="left-header">
-            <a href="?home" id="home">
+            <a href="index.php" id="home">
                 <img src="src/model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
             </a>
         </div>
@@ -38,34 +42,32 @@
         <div class="cart-shop">
 
             <!----------------- Ícone do usuário com botão para abrir o modal ----------------->
-            <a href="src/view/pages/login-page.php?login" id="usuario" class="icon-button">
-                <img src="src/model/imgs/usuario.png" alt="usuario" title="login">
-                <?php
 
-                include 'src/view/verify-login.php';
-                session_start();
 
-                ?>
+            <?php
+            if (isset($_SESSION['usuario_email'])) {
+                $userLink = "src/view/pages/profile.php";
+                $userTitle = "Perfil";
+            } else {
+                $userLink = "src/view/pages/login-page.php";
+                $userTitle = "Login";
+            }
+            ?>
+            <a href="<?php echo $userLink; ?>" class="icon-button">
+                <img src="src/model/imgs/usuario.png" alt="usuario" title="<?php echo $userTitle; ?>">
             </a>
-
-            <!----------------- Ícone do carrinho ----------------->
-            <a href="carrinho.php?carrinho" class="icon-button">
+            <a href="src/view/pages/carrinho.php" class="icon-button">
                 <img src="src/model/imgs/carrinho.avif">
             </a>
         </div>
 
     </header>
 
+
     <main>
-        <?php
 
-        $param = isset($_GET["param"]) ?? "home";
-        $pagina = "src/view/{$param}.php";
-
-
-
-        ?>
     </main>
+
 
 
     <div id="carouselExampleDark" class="carousel carousel-dark slide">
