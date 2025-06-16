@@ -1,3 +1,79 @@
+<?php
+session_start();
+
+$host = 'localhost';
+$user = 'root';
+$password = '';
+$db = 'mdsupplements';
+
+$conn = new mysqli($host, $user, $password, $db);
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
+}
+
+$showRegister = false;
+$loginError = '';
+$registerSuccess = '';
+
+if (isset($_SERVER['REQUEST_METHOD']) === 'POST' && isset($_POST['login'])) {
+
+    $email = $_POST['email'];
+    $senha = $_POST['senha'];
+
+    $sql = "SELECT id_usuario, nome, email, senha FROM usuario WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result && $result->num_rows > 0) {
+        $user = $result->fetch_assoc();
+        // Se usar password_hash, troque para password_verify($senha, $user['senha'])
+        if ($senha === $user['senha']) {
+            $_SESSION['usuario_id'] = $user['id_usuario'];
+            $_SESSION['usuario_nome'] = $user['nome'];
+            $_SESSION['usuario_email'] = $user['email'];
+            header("Location: profile.php");
+            exit;
+        } else {
+            $loginError = "Senha incorreta.";
+        }
+    } else {
+        $loginError = "Usuário não encontrado.";
+    }
+    $stmt->close();
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
+    $nome = $_POST['nome'];
+    $email = $_POST['email'];
+    $senha = $_POST['senha'];
+    $endereco = $_POST['endereco'];
+    $telefone = $_POST['telefone'];
+
+    // Verifica se o email já existe
+    $sql = "SELECT id_usuario FROM usuario WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        $registerError = "Este email já está cadastrado!";
+    } else {
+        $sql_insert = "INSERT INTO usuario (nome, email, senha, endereco, telefone) VALUES (?, ?, ?, ?, ?)";
+        $stmt_insert = $conn->prepare($sql_insert);
+        $stmt_insert->bind_param("sssss", $nome, $email, $senha, $endereco, $telefone);
+        if ($stmt_insert->execute()) {
+            $registerSuccess = "Cadastro realizado com sucesso! Faça login.";
+        } else {
+            $registerError = "Erro ao cadastrar: " . $conn->error;
+        }
+        $stmt_insert->close();
+    }
+    $stmt->close();
+}
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -7,20 +83,12 @@
     <title>MD-Supplements</title>
     <link rel="stylesheet" href="../../model/style/style.css">
     <link rel="shortcut icon" href="../../model/imgs/MD-LOGO.avif">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
-    <style>
-        body {
-
-            background: rgba(165, 16, 16, 0.77);
-
-        }
-    </style>
     <header class="header">
         <div class="left-header">
             <a href="../../../index.php?home" class="logo">
@@ -28,131 +96,54 @@
             </a>
         </div>
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="O que você está procurando?" oninput="searchProduct(document.getElementById(onclick='searchInput'.value({ $_GET})));">
+            <input type="text" id="searchInput" placeholder="O que você está procurando?">
         </div>
         <div class="cart-shop">
-
-            <!----------------- Ícone do usuário com botão para abrir o modal ----------------->
-            <a href="<?php echo isset($_SESSION['usuario']) && $_SESSION['usuario'] ? '../profile.php' : '#user'; ?>" class="icon-button">
-                <img src="../../model/imgs/usuario.png" alt="usuario" title="profile">
-
-                <?php
-
-                include '../verify-login.php';
-
-                ?>
+            <?php
+            if (isset($_SESSION['email'])) {
+                $usuario_email = $_SESSION['usuario_email'];
+                $stmt = $conn->prepare("SELECT email, nome FROM usuario WHERE email = ?");
+                $stmt->bind_param("s", $usuario_email);
+                $stmt->execute();
+                $stmt->store_result();
+                if ($stmt->num_rows > 0) {
+                    $userLink = "profile.php";
+                    $userTitle = "Perfil";
+                } else {
+                    $userLink = "login-page.php";
+                    $userTitle = "Login";
+                }
+                $stmt->close();
+            } else {
+                $userLink = "src/view/pages/login-page.php";
+                $userTitle = "Login";
+            }
+            ?>
+            <a href="<?php echo $userLink; ?>" class="icon-button">
+                <img src="../../model/imgs/usuario.png" alt="usuario" title="<?php echo $userTitle; ?>">
             </a>
-
-            <!----------------- Ícone do carrinho ----------------->
-            <a href="?=carrinho" class="icon-button">
+            <a href="carrinho.php" class="icon-button">
                 <img src="../../model/imgs/carrinho.avif">
             </a>
         </div>
-
     </header>
-
-    <!------------------ Modal de Login/Cadastro ----------------->
-    <?php
-    // Conexão com o banco de dados (ajuste os dados conforme necessário)
-    $host = 'localhost';
-    $user = 'root';
-    $password = '';
-    $db = 'mdsupplements';
-
-    $conn = new mysqli($host, $user, $password, $db);
-    if ($conn->connect_error) {
-        die("Erro de conexão: " . $conn->connect_error);
-    }
-
-    $showRegister = false;
-    $loginError = '';
-    $registerSuccess = '';
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_POST['login'])) {
-
-            // registro do login
-            $email = $conn->real_escape_string($_POST['email']);
-            $senha = $_POST['senha'];
-            $sql = "SELECT * FROM usuario WHERE email='$email'";
-            $result = $conn->query($sql);
-            if ($result && $result->num_rows > 0) {
-                $user = $result->fetch_assoc();
-                if (password_verify($senha, $user['senha'])) {
-                    session_start();
-                    $_SESSION['usuario'] = $user['nome'];
-                    header("Location: login-page.php");
-                    exit;
-                } else {
-                    $loginError = "Senha incorreta.";
-                }
-            } else {
-
-                // se o mail não foi cadastrado, mostrar formulário de registro
-                $showRegister = true;
-            }
-        } elseif (isset($_POST['register'])) {
-
-            // Registro
-            $nome = $conn->real_escape_string($_POST['nome']);
-            $endereco = $conn->real_escape_string($_POST['endereço']);
-            $telefone = $conn->real_escape_string($_POST['telefone']);
-
-            $dt_nascimento_raw = $_POST['dt_nascimento'];
-            $dt_nascimento_obj = DateTime::createFromFormat('Y-m-d', $dt_nascimento_raw);
-            $dt_nascimento = $dt_nascimento_obj ? $dt_nascimento_obj->format('d/m/y') : '';
-
-            $email = $conn->real_escape_string($_POST['email']);
-            // Hash da senha informada no registro
-            $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
-
-            // Deixe o campo 'id' para o banco de dados gerar automaticamente (auto_increment)
-            $sql = "INSERT INTO usuario (nome, endereço, telefone, dt_nascimento, email, senha) VALUES ('$nome', '$endereco', '$telefone', '$dt_nascimento', '$email', '$senha')";
-            if ($conn->query($sql) === TRUE) {
-                session_start();
-                $_SESSION['usuario'] = $nome;
-                $registerSuccess = "Cadastro realizado com sucesso!";
-                header("Location: login-page.php");
-                exit;
-            } else {
-                $loginError = "Erro ao cadastrar: " . $conn->error;
-                $showRegister = true;
-            }
-        }
-    }
-    ?>
-
-    <div class="text-center" style="display:flex; margin-top: 7%; " tabindex="-1">
+    <div class="text-center" style="display:flex; margin-top: 7%;" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-
-                <?php
-                if (!$showRegister):
-                ?>
-
+                <?php if (!$showRegister): ?>
                     <div class="modal-header">
                         <h5 class="modal-title">Login</h5>
                     </div>
                     <div class="modal-body">
-
-                        <?php
-                        if ($loginError):
-                        ?>
-
+                        <?php if ($loginError): ?>
                             <div class="alert alert-danger">
                                 <?= htmlspecialchars($loginError) ?>
                             </div>
-
-                        <?php
-                        endif;
-                        ?>
-
+                        <?php endif; ?>
                         <form method="POST">
                             <div>
                                 <input type="email" name="email" required placeholder="Email" class="form-control mb-2">
                                 <input type="password" name="senha" required placeholder="Senha" class="form-control mb-2">
-                                <i class="bi bi-eye-fill" id="btn-senha" onclick="showPassword()">
-                                </i>
                                 <button type="submit" name="login" class="btn btn-primary w-100">Entrar</button>
                             </div>
                         </form>
@@ -162,61 +153,34 @@
                         <h5 class="modal-title">Cadastro</h5>
                     </div>
                     <div class="modal-body">
-
-                        <?php
-                        if ($loginError):
-                        ?>
-
-                            <div class="alert alert-danger"><?= htmlspecialchars($loginError) ?></div>
-
-                        <?php
-                        endif;
-                        ?>
-
+                        <?php if (isset($registerError) && $registerError): ?>
+                            <div class="alert alert-danger">
+                                <?= htmlspecialchars($registerError) ?>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (isset($registerSuccess) && $registerSuccess): ?>
+                            <div class="alert alert-success">
+                                <?= htmlspecialchars($registerSuccess) ?>
+                            </div>
+                        <?php endif; ?>
                         <form method="POST">
                             <input type="text" name="nome" required placeholder="Nome Completo" class="form-control mb-2">
-
-                            <input type="text" name="endereço" required placeholder="Endereço" class="form-control mb-2">
-
+                            <input type="text" name="endereco" required placeholder="Endereço" class="form-control mb-2">
                             <input type="text" name="telefone" required placeholder="Telefone" class="form-control mb-2">
-
-                            <input type="date" name="dt_nascimento" required placeholder="Data de Nascimento" class="form-control mb-2">
-
                             <input type="email" name="email" required placeholder="Email" class="form-control mb-2" value="<?= isset($_POST['email']) ? htmlspecialchars($_POST['email']) : '' ?>">
-
-                            <input type="password" name="senha" required placeholder="Senha" class="form-control mb-2">
-
-                            <button type="submit" name="register" class="btn btn-success w-100" style="border-radius:20px;">Cadastrar</button>
+                            <input type="password" name="senha" id="input-senha" required placeholder="Senha" class="form-control mb-2">
+                            <button type="submit" name="register" id="btn-senha" class="btn btn-success w-100" style="border-radius:20px;">Cadastrar</button>
                         </form>
-
                     </div>
-                <?php
-                endif;
-                ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
-
-    <style>
-        form {
-        
-            display: grid;            
-            & input {
-                width: 100%;
-                line-height: 40px;
-                font-size: 20px;
-                padding: 0 50px 0 20px;
-            }
-            & div i {
-                font-size: 30px;
-                cursor: pointer;
-                position: absolute;
-                right: 5%;
-                bottom:44px;
-            }
-        }
-    </style>
-
 </body>
+<style>
+    body {
+        background: rgba(165, 16, 16, 0.77);
+    }
+</style>
 
 </html>

@@ -1,4 +1,4 @@
-        <div class="footer">
+<div class="footer">
             <div class="container">
                 <a href="">
                     <li>Politicas da Loja</li>
@@ -11,17 +11,14 @@
                 </a>
             </div>
             <div class="form-container text-center">
-                <form method="post" class="form text-center">
+                <form method="post" class="form text-center" action=" https://formsubmit.co/duskkazuki@gmail.com" id="emailForm">
                     <h2 class="form-title">Fale Conosco</h2>
                     <div class="form-group">
+                        <input type="hidden" name="_captcha" value="false">
                         <label for="name">Nome:</label>
                         <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
                         <label for="email">E-mail:</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
+                        <input type="email" id="emailInput" name="email" required>
                         <label for="message">Mensagem:</label>
                         <textarea id="message" name="message" rows="4" required></textarea>
                     </div>
@@ -75,3 +72,5 @@
 
             }
         </style>
+
+        <script src="../controller/scripts/form.js"></script>
