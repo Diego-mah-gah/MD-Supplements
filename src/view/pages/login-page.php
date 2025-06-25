@@ -15,7 +15,7 @@ $showRegister = false;
 $loginError = '';
 $registerSuccess = '';
 
-if (isset($_SERVER['REQUEST_METHOD']) === 'POST' && isset($_POST['login'])) {
+if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
 
     $email = $_POST['email'];
     $senha = $_POST['senha'];
@@ -42,7 +42,7 @@ if (isset($_SERVER['REQUEST_METHOD']) === 'POST' && isset($_POST['login'])) {
         $loginError = "Usuário não encontrado.";
     }
     $stmt->close();
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
+} elseif (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     $nome = $_POST['nome'];
     $email = $_POST['email'];
     $senha = $_POST['senha'];

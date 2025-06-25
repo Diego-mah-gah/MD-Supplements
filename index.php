@@ -30,62 +30,75 @@ session_start();
 </head>
 
 <body>
-    <header class="header">
-        <div class="left-header">
-            <a href="index.php" id="home">
-                <img src="src/model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
-            </a>
-        </div>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="O que você está procurando?" oninput="searchProduct(document.getElementById(onclick='searchInput'.value({ $_GET})));">
-        </div>
-        <div class="cart-shop">
+    <div id="mainBar">
+        <button onclick="switchMainBarVisibility()" class="mainBarButton mobile-only">
+            <img src="src/model/imgs/menu.svg" alt="Menu" class="menu-icon">
+        </button>
+        <header class="header" id="navbar">
+            <div id="mainContainer">
+                <div id="globalContainer">
+                    <div class="left-header desktop-only">
+                        <a href="index.php" id="home">
+                            <img src="src/model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
+                        </a>
+                    </div>
+                    <div class="search-box desktop-only" >
+                        <input type="text" id="searchInput" name="search" placeholder="O que você está procurando?" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                        <button type="submit" onclick="searchProduct(document.getElementById('searchInput').value); return false;"><img src="src/model/imgs/icon-search.gif" alt="search icon"></button>
+                        <div id="resultSearch"></div>
+                    </div>
+                    <div class="cart-shop desktop-only">
+                        <?php
+                        if (isset($_SESSION['usuario_email'])) {
+                            $userLink = "src/view/pages/profile.php";
+                            $userTitle = "Perfil";
+                        } else {
+                            $userLink = "src/view/pages/login-page.php";
+                            $userTitle = "Login";
+                        }
+                        ?>
+                        <a href="<?php echo $userLink; ?>" class="icon-button">
+                            <img src="src/model/imgs/usuario.png" alt="usuario" title="<?php echo $userTitle; ?>">
+                        </a>
+                        <a href="src/view/pages/carrinho.php" class="icon-button">
+                            <img src="src/model/imgs/carrinho.avif">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- NavBar para mobile -->
+        <nav id="sideNav" class="mobile-only">
+            <ul>
+                <li><a href="<?php echo $userLink; ?>">Perfil</a></li>
+                <li><a href="src/view/pages/carrinho.php">Carrinho</a></li>
+                <li><a href="#" onclick="showSearchInputMobile();return false;">Pesquisar</a></li>
+            </ul>
+            <div id="mobileSearchBox" style="display:none; padding:10px;">
+                <input type="text" id="mobileSearchInput" name="search" placeholder="O que você está procurando?" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                <button type="submit" onclick="searchProduct(document.getElementById('mobileSearchInput').value); return false;">Buscar</button>
+            </div>
+        </nav>
+    </div>
 
-            <!----------------- Ícone do usuário com botão para abrir o modal ----------------->
 
 
-            <?php
-            if (isset($_SESSION['usuario_email'])) {
-                $userLink = "src/view/pages/profile.php";
-                $userTitle = "Perfil";
-            } else {
-                $userLink = "src/view/pages/login-page.php";
-                $userTitle = "Login";
-            }
-            ?>
-            <a href="<?php echo $userLink; ?>" class="icon-button">
-                <img src="src/model/imgs/usuario.png" alt="usuario" title="<?php echo $userTitle; ?>">
-            </a>
-            <a href="src/view/pages/carrinho.php" class="icon-button">
-                <img src="src/model/imgs/carrinho.avif">
-            </a>
-        </div>
-
-    </header>
-
-
-    <main>
-
-    </main>
-
-
-
-    <div id="carouselExampleDark" class="carousel carousel-dark slide">
+    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1" style="background-color:bisque; padding:2px 20px; border-radius: 100px 100px;"></button>
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2" style="background-color:bisque; padding:2px 20px; border-radius: 100px 100px;"></button>
             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3" style="background-color:bisque; padding:2px 20px; border-radius: 100px 100px;"></button>
         </div>
         <div class="carousel-inner" id="carousel-img">
-            <div class="carousel-item active" data-bs-interval="10000">
+            <div class="carousel-item active" data-bs-interval="5000">
                 <img src="src/model/imgs/leostronda1.jpg" class="d-block w-100" alt="whey Monstro">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5 style="color:antiquewhite; background-color:rgba(139, 31, 29, 0.45);  margin:30% 0; position:sticky; border-radius: 30px; padding:20px;  ">
+                    <h5 style="color:antiquewhite; background-color:rgba(139, 31, 29, 0.45);  margin:30% 0; position:sticky; border-radius: 30px; padding:20px; display:flex;">
                         <strong>OS MELHORES SUPLEMENTOS DA CIDADE </strong>
                     </h5>
                 </div>
             </div>
-            <div class="carousel-item" data-bs-interval="2000">
+            <div class="carousel-item" data-bs-interval="5000">
                 <img src="src/model/imgs/creatina-bg.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5 style="color:antiquewhite; background-color:rgba(139, 31, 29, 0.45);  margin:30% 0; position:sticky; border-radius: 30px; padding:2%;">
@@ -93,7 +106,7 @@ session_start();
                     </h5>
                 </div>
             </div>
-            <div class="carousel-item" data-bs-interval="2000">
+            <div class="carousel-item" data-bs-interval="5000">
                 <img src="src/model/imgs/leo-cozinha.jpg" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5 style="color:antiquewhite; background-color:rgba(139, 31, 29, 0.45);  margin:30% 0; position:sticky; border-radius: 30px; padding:2%;">
@@ -123,21 +136,21 @@ session_start();
     </div>
 
 
-    <!-------------------- Ícones dos produtos (círculos) ----------------->
+    <!-------------------- Ícones dos produtos ----------------->
     <div class="category-section">
-        <a class="category" href="/creatina" style="text-decoration: none;">
+        <a class="category" href="src/view/pages/creatina.php" style="text-decoration: none;">
             <img src="src/model/imgs/um-homem-musculoso-sem-camisa-usando-shorts-esportivos-e-pegando-proteina-em-po-de-um-fras.avif" alt="Creatina">
             <p>Creatina</p>
         </a>
-        <a class="category" href="/whey" style="text-decoration: none;">
+        <a class="category" href="src/view/pages/whey.php" style="text-decoration: none;">
             <img src="src/model/imgs/whey-protein-com-carboidrato.avif" alt="Whey Protein">
             <p>Whey Protein</p>
         </a>
-        <a class="category" href="/pre-treino" style="text-decoration: none;">
+        <a class="category" href="src/view/pages/pre-treino.php" style="text-decoration: none;">
             <img src="src/model/imgs/homem_atletico_sem_camisa_fazendo_exercicios_de_biceps_com_um_haltere_em_fundo_cinza_vinhe.avif" alt="Pré Treino">
             <p>Pré Treino</p>
         </a>
-        <a class="category" href="/emagrecedor" style="text-decoration: none;">
+        <a class="category" href="src/view/pages/emagrecedor.php" style="text-decoration: none;">
             <img src="src/model/imgs/treino-para-perder-peso-1_edited.avif" alt="Emagrecedor">
             <p>Emagrecedor</p>
         </a>
@@ -160,8 +173,11 @@ session_start();
                         break;
                     }
                 }
-                header('Location: ' . $_SERVER['REQUEST_URI']);
-                exit();
+                // Redireciona para o carrinho se solicitado
+                if (isset($_GET['redirect']) && $_GET['redirect'] === 'carrinho') {
+                    header('Location: src/view/pages/carrinho.php');
+                    exit();
+                }
             }
         }
 
@@ -171,12 +187,8 @@ session_start();
             $pagina = "src/view/home.php";
         }
 
-        if (file_exists($pagina)) {
+        if (file_exists($pagina))
             include $pagina;
-        } else {
-            header("Location: src/view/html-page/404.html");
-            exit();
-        }
         ?>
 
 
