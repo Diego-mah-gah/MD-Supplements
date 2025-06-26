@@ -71,6 +71,7 @@ session_start();
         <!-- NavBar para mobile -->
         <nav id="sideNav" class="mobile-only">
             <ul>
+                <li><a href="../../../index.php">Início</a></li>
                 <li><a href="<?php echo $userLink; ?>">Perfil</a></li>
                 <li><a href="carrinho.php">Carrinho</a></li>
                 <li><a href="#" onclick="showSearchInputMobile();return false;">Pesquisar</a></li>
@@ -130,7 +131,7 @@ session_start();
                             msg.style.borderRadius = '5px';
                             msg.style.zIndex = 9999;
                             document.body.appendChild(msg);
-                            setTimeout(() => msg.remove(), 7000);
+                            setTimeout(() => msg.remove(), 5000);
                         }
                     </script>
                     </form>

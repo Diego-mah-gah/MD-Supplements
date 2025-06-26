@@ -1,48 +1,48 @@
 <?php
-require_once __DIR__ . '/../vendor/autoload.php';
+header('Content-Type: text/plain');
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-// Dados do formulário
-$email = $_POST['email'] ?? '';
-$message = $_POST['message'] ?? '';
-$name = $_POST['name'] ?? '';
-
-// Validação
-if (!$email || !$message || !$name) {
-    echo "Dados inválidos.";
+// Verifica se a requisição é do tipo POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    echo 'Método não permitido';
     exit;
 }
+
+// Coleta os dados do formulário que é preenchido pelo usuário
+// e sanitiza as entradas para evitar injeção de código
+$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+$subject = filter_input(INPUT_POST, 'subject', FILTER_SANITIZE_STRING);
+$message = filter_input(INPUT_POST, 'message', FILTER_SANITIZE_STRING);
+
+// Validação dos dados
+if (empty($name) || empty($email) || empty($subject) || empty($message)) {
+    echo 'Todos os campos são obrigatórios';
+    exit;
+}
+
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    echo "E-mail inválido.";
+    echo 'Email inválido';
     exit;
 }
 
-$mail = new PHPMailer(true);
+// Aqui vai configurar o envio do email
+$to = 'duskkazuki@gmail.com.com'; 
+$headers = "From: $name <$email>\r\n";
+$headers .= "Reply-To: $email\r\n";
+$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
-try {
-    // Configurações do Gmail
-    $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = 'kawadiego.soares@gmail.com'; // Seu Gmail
-    $mail->Password = 'pvqn pbbq korz brpu'; // Senha de app do Gmail
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
+// Monta o corpo do email
+$email_body = "Você recebeu uma nova mensagem do formulário de contato do seu site.\n\n";
+$email_body .= "Nome: $name\n";
+$email_body .= "Email: $email\n\n";
+$email_body .= "Assunto: $subject\n\n";
+$email_body .= "Mensagem:\n$message\n";
 
-    // Remetente e destinatário
-    $mail->setFrom('kawadiego.soares@gmail.com', 'Site M&D Supplements');
-    $mail->addReplyTo($email, $name);
-    $mail->addAddress('kawadiego.soares@gmail.com', 'Kawã Diego');
+// Envia o email
+$mail_sent = mail($to, $subject, $email_body, $headers);
 
-    // Conteúdo
-    $mail->isHTML(false);
-    $mail->Subject = 'Contato do Site';
-    $mail->Body    = "Nome: $name\nE-mail: $email\nMensagem:\n$message";
-
-    $mail->send();
-    echo 'Mensagem enviada com sucesso!';
-} catch (Exception $e) {
-    echo "Erro ao enviar mensagem: {$mail->ErrorInfo}";
+if ($mail_sent) {
+    echo 'success';
+} else {
+    echo 'Erro ao enviar o email. Por favor, tente novamente mais tarde.';
 }

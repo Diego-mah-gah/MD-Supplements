@@ -177,6 +177,22 @@ header {
   border-radius: 50%;
   padding: 15px;
   z-index: 1000;
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 15px rgba(37,211, 102, 0);
+    transform: scale(1.1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    transform: scale(1);
+  }
 }
 
 .whatsapp-button img {
@@ -324,7 +340,7 @@ footer {
     width: 220px;
     height: 100vh;
     background: #222;
-    color: #ff000068;
+    color: #ff000025;
     z-index: 9999;
     transition: right 0.3s;
     box-shadow: 2px 0 8px rgba(0,0,0,0.2);
@@ -349,7 +365,7 @@ footer {
     display: block;
   }
   #sideNav ul li a:hover {
-    background: #be100d;
+    background: #5503023f 0.5s ease-in-out;
     border-radius: 6px;
   }
   #mainBar {

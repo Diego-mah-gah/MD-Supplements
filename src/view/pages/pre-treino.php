@@ -109,6 +109,35 @@ session_start();
         </a>
     </div>
 
+    <div class="container">
+        <h1 class="text-center my-4">Pré-Treino</h1>
+        <div class="row">
+            <div class='col-12 col-md-4 mb-4'>
+                <div class='card h-100'>
+                    <img src="../../model/imgs/pre-treino.avif" class="card-img-top" alt="Pré Treino">
+                    <button type='submit' name='add_to_cart' class='btn btn-primary' onclick='showMessage();'>Adicionar ao Carrinho</button>
+                    <script>
+                        function showMessage() {
+                            let msg = document.createElement('div');
+                            msg.textContent = 'Produto adicionado ao carrinho!';
+                            msg.style.position = 'fixed';
+                            msg.style.top = '20px';
+                            msg.style.right = '20px';
+                            msg.style.background = '#28a745';
+                            msg.style.color = '#fff';
+                            msg.style.padding = '10px 20px';
+                            msg.style.borderRadius = '5px';
+                            msg.style.zIndex = 9999;
+                            document.body.appendChild(msg);
+                            setTimeout(() => msg.remove(), 7000);
+                        }
+                    </script>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container my-4"></div>
     <div class="row g-3 justify-content-center text-center" style="background-color: #be100d; width:auto; padding:10%; margin-top:60px; font-size:1.2rem; color:antiquewhite; border-radius: 10px;">
         <div class="col-12 col-sm-6 col-md-4">

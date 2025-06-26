@@ -49,7 +49,7 @@ session_start();
                     </div>
                     <div class="cart-shop desktop-only">
                         <?php
-                        if (isset($_SESSION['usuario_email'])) {
+                        if (isset($_SESSION['email'])) {
                             $userLink = "src/view/pages/profile.php";
                             $userTitle = "Perfil";
                         } else {
@@ -72,11 +72,12 @@ session_start();
             <ul>
                 <li><a href="<?php echo $userLink; ?>">Perfil</a></li>
                 <li><a href="src/view/pages/carrinho.php">Carrinho</a></li>
+                <li><a href="https://wa.me/44999649804?text=Olá, gostaria de tirar uma dúvida. Poderia me ajudar por favor?" target="_blank" class="whatsapp-nav">Fale Conosco</a></li>
                 <li><a href="#" onclick="showSearchInputMobile();return false;">Pesquisar</a></li>
             </ul>
             <div id="mobileSearchBox" style="display:none; padding:10px;">
                 <input type="text" id="mobileSearchInput" name="search" placeholder="O que você está procurando?" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                <button type="submit" onclick="searchProduct(document.getElementById('mobileSearchInput').value); return false;">Buscar</button>
+                <button type="submit" onclick="searchProduct(document.getElementById('mobileSearchInput').value); return false;" style="border:none; background-color:blueviolet; color:white; width:50%; height:70%;">Buscar</button>
             </div>
         </nav>
     </div>
