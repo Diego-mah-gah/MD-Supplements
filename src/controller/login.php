@@ -1,47 +1,21 @@
 <?php
-// Conexão com o banco de dados
-$conn = new mysqli("localhost", "root", "", "mdsupplements");
+$host = 'localhost'; 
+$db   = 'mdsupplements'; 
+$user = 'root'; // Altere para o seu usuário do banco de dados
+$pass = '';     // Altere para a sua senha do banco de dados
 
-// Verifica a conexão
-if ($conn->connect_error) {
-    die("Conexão falhou: " . $conn->connect_error);
+$charset = 'utf8mb4';
+
+$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$opcoes = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+
+try {
+     $pdo = new PDO($dsn, $user, $pass, $opcoes);
+} catch (\PDOException $e) {
+     die("Erro ao conectar com o banco de dados: " . $e->getMessage());
 }
 
-if (isset($_POST['email']) && isset($_POST['senha'])) {
-    $nome = $session_name(session_name($_POST['nome']));
-    $email = $_POST['email'];
-    $senha = password_hash($_POST['senha'], PASSWORD_DEFAULT);
-    $endereço = $_POST['endereco'];
-    $telefone = $_POST['telefone'];
-    $data_nascimento = $_POST['data_nascimento'];
-    $id = $_SESSION['id'] ?? null;
-
-
-    // Verifica se o email já existe
-    $sql = "SELECT id FROM usuario WHERE email = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-        echo "Este email já está cadastrado!";
-        echo "Tente outro email.";
-    } else {
-        $sql = "INSERT INTO usuario (email, senha) VALUES (?, ?)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ss", $email, $senha, $nome, $endereço, $telefone, $data_nascimento);
-        if ($stmt->execute()) {
-            echo "Cadastro realizado com sucesso!";
-        } else {
-            echo "Erro ao cadastrar: " . $conn->error;
-        }
-    }
-
-    $stmt->close();
-}
-
-
-$nomeAntigo = new $session_name(session_name('usuario'));
-$conn->close();
-session_start();

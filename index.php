@@ -53,7 +53,7 @@ session_start();
                             $userLink = "src/view/pages/profile.php";
                             $userTitle = "Perfil";
                         } else {
-                            $userLink = "src/view/pages/login-page.php";
+                            $userLink = "src/view/pages/app.php";
                             $userTitle = "Login";
                         }
                         ?>
@@ -94,7 +94,7 @@ session_start();
             <div class="carousel-item active" data-bs-interval="5000">
                 <img src="src/model/imgs/leostronda1.jpg" class="d-block w-100" alt="whey Monstro">
                 <div class="carousel-caption d-none d-md-block">
-                    <h5 style="color:antiquewhite; background-color:rgba(139, 31, 29, 0.45);  margin:30% 0; position:sticky; border-radius: 30px; padding:20px; display:flex;">
+                    <h5 style="color:antiquewhite; background-color:rgba(139, 31, 29, 0.45);  margin:30% 0; position:sticky; border-radius: 30px; padding:20px;">
                         <strong>OS MELHORES SUPLEMENTOS DA CIDADE </strong>
                     </h5>
                 </div>
@@ -197,13 +197,13 @@ session_start();
 
 
     <div class="container my-4"></div>
-    <div class="row g-3 justify-content-center text-center" style="background-color: #be100d; width:auto; padding:10%; margin-top:60px; font-size:1.2rem; color:antiquewhite; border-radius: 10px;">
+    <div class="row g-3 justify-content-center text-center" style="background-color: #be100d; padding:10%; display:flex; width:100%; margin-top:60px; font-size:1.2rem; color:antiquewhite;">
         <div class="col-12 col-sm-6 col-md-4">
             <div class="info-item d-flex flex-column align-items-center h-100">
                 <img src="src/model/imgs/truck-fast.png" alt="fast-truck" style="width:48px; height:auto;">
                 <div class="info-text mt-2">
                     <strong>
-                        <p class="mb-0" style=>
+                        <p class="mb-0">
                             Paraná acima de R$ 399,99<br>
                             Santa Catarina acima de R$ 599,99<br>
                             São Paulo acima de R$ 599,99<br>
@@ -216,7 +216,7 @@ session_start();
         <div class="col-12 col-sm-6 col-md-4">
             <div class="info-item d-flex flex-column align-items-center h-100">
                 <img src="src/model/imgs/card-payment.png" alt="credit-card" style="width:48px; height:auto;">
-                <p class="mt-2 mb-0" style=>
+                <p class="mt-2 mb-0">
                     <strong>
                         Parcelamos suas compras em 3x sem juros
                     </strong>
@@ -226,7 +226,7 @@ session_start();
         <div class="col-12 col-sm-6 col-md-4">
             <div class="info-item d-flex flex-column align-items-center h-100">
                 <img src="src/model/imgs/locker.png" alt="locker" style="width:48px; height:auto;">
-                <p class="mt-2 mb-0" style=>
+                <p class="mt-2 mb-0">
                     <strong>
                         Site 100% seguro
                     </strong>

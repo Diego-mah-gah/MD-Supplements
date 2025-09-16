@@ -71,8 +71,10 @@ session_start();
         <!-- NavBar para mobile -->
         <nav id="sideNav" class="mobile-only">
             <ul>
+                <li><a href="../../../index.php">Início</a></li>
                 <li><a href="<?php echo $userLink; ?>">Perfil</a></li>
                 <li><a href="carrinho.php">Carrinho</a></li>
+                <li><a href="https://wa.me/44999649804?text=Olá, gostaria de tirar uma dúvida. Poderia me ajudar por favor?" target="_blank" class="whatsapp-nav">Fale Conosco</a></li>
                 <li><a href="#" onclick="showSearchInputMobile();return false;">Pesquisar</a></li>
             </ul>
             <div id="mobileSearchBox" style="display:none; padding:10px;">
@@ -110,12 +112,19 @@ session_start();
     </div>
 
 
-        <div class="container">
+    <div class="container">
         <h1 class="text-center my-4">Emagrecedor</h1>
         <div class="row">
             <div class='col-12 col-md-4 mb-4'>
                 <div class='card h-100'>
                     <img src="../../model/imgs/2-hot.avif" class="card-img-top" alt="Termogênico">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-4 mb-4">
+                            <div class="d-flex align-items-center justify-content-center" style="margin-top: 10px;">
+                                <span style="font-size: 1.5rem; font-weight: bold; color: #be100d;">R$ 129,90</span>
+                            </div>
+                        </div>
+                    </div>
                     <button type='submit' name='add_to_cart' class='btn btn-primary' onclick='showMessage();'>Adicionar ao Carrinho</button>
                     <script>
                         function showMessage() {
@@ -134,6 +143,18 @@ session_start();
                         }
                     </script>
                     </form>
+                </div>
+            </div>
+            <div class="col-12 col-md-8 d-flex align-items-center">
+                <div class="explanatory-text-container w-100">
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis nobis natus id veniam expedita nostrum.
+                    </p>
+                    <ul>
+                        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. </li>
+                        <li> Totam quisquam odit dicta autem quas modi culpa porro?</li>
+                        <li>Aut minus blanditiis, officiis delectus animi, eaque possimus ducimus assumenda eveniet facere libero?</li>
+                    </ul>
                 </div>
             </div>
         </div>

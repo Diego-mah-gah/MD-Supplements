@@ -1,52 +1,40 @@
-<div class="best-sellers">
-    <!-------------------------------- Produtos vão aqui ------------------------------>
+<?php
+require_once 'carrinho_db.php';
 
-    <h2 class="mt-0">Mais vendidos</h2>
+$produtos = [];
+$conn = conectarBanco();
 
+$sql = "SELECT id, nome, preco, imagem, destaque FROM produtos WHERE destaque = 'sim'";
+$result = $conn->query($sql);
 
-
-</div>
-
-
-<main class="container">
-
-    <?php
-
-    foreach ($produtos as $produto) {
-        if ($produto['destaque'] == 'sim') {
-
-            echo
-            "<div class='col-12 col-md-3 text-center' style='display: inline-block; margin: 10px;'>
-    <div class='card' style='margin: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;'>
-
-        <img src='src/imgs/{$produto['imagem']}' alt='{$produto['nome']}' style='width:auto; height:auto;'>
-            <h3>{$produto['nome']}</h3>
-                <p>R$ " . number_format($produto['preco'], 2, ',', '.') . "</p>
-                <form method='post' action='?action=add_to_cart'>
-                    <input type='hidden' name='produto_nome' value='{$produto['nome']}'>
-
-                        <button type='submit' name='add_to_cart' class='btn btn-primary' onclick='showMessage();'>Adicionar ao Carrinho</button>
-                            <script>
-                            function showMessage() {
-                                let msg = document.createElement('div');
-                                msg.textContent = 'Produto adicionado ao carrinho!';
-                                msg.style.position = 'fixed';
-                                msg.style.top = '20px';
-                                msg.style.right = '20px';
-                                msg.style.background = '#28a745';
-                                msg.style.color = '#fff';
-                                msg.style.padding = '10px 20px';
-                                msg.style.borderRadius = '5px';
-                                msg.style.zIndex = 9999;
-                                document.body.appendChild(msg);
-                                setTimeout(() => msg.remove(), 7000);
-                            }
-                            </script>
-                </form>
-    </div>
-</div>";
-        }
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $produtos[] = $row;
     }
-    ?>
+}
 
-</main>
+$conn->close();
+?>
+
+<link rel="stylesheet" href="src/model/style/style.css">
+
+<div class="best-sellers">
+    <h2 class="mt-0">Mais vendidos</h2>
+    <div class="produtos-grid d-flex flex-wrap justify-content-center" style="width: auto;">
+        <?php foreach ($produtos as $produto): ?>
+            <div class="produto-card">
+                <img src="<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>">
+                <h3><?php echo htmlspecialchars($produto['nome']); ?></h3>
+                <p class="price">R$ <?php echo number_format($produto['preco'], 2, ',', '.'); ?></p>
+                <form method="post" action="index.php?param=produtos">
+                    <input type="hidden" class="btn btn-primary" name="adicionar_ao_carrinho" value="1"<?php if (isset($_SESSION['carrinho'][$produto['id']])) echo ' checked'; ?>>
+                    <input type="hidden" name="produto_id" value="<?php echo htmlspecialchars($produto['id']); ?>">
+                    <button type="submit">Adicionar ao Carrinho</button>
+                </form>
+            </div>
+        <?php endforeach; ?>
+        <?php if (empty($produtos_destaque)): ?>
+            <?php echo '<p>Nenhum produto em destaque encontrado.</p>'; ?>
+        <?php endif; ?>
+    </div>
+</div>
