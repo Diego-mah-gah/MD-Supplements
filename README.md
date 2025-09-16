@@ -6,3 +6,4 @@ ___
 Products, User Log-In, Cart, contact with Whatsapp.
 ___
 
+Database used for register users in the shop, just a simple login interface
