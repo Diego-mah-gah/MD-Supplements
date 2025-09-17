@@ -30,7 +30,6 @@ session_start();
 </head>
 
 <body>
-
     <div id="mainBar">
         <button onclick="switchMainBarVisibility()" class="mainBarButton mobile-only">
             <img src="../../model/imgs/menu.svg" alt="Menu" class="menu-icon">
@@ -49,19 +48,19 @@ session_start();
                         <div id="resultSearch"></div>
                     </div>
                     <div class="cart-shop desktop-only">
-                        <?php
-                        if (isset($_SESSION['usuario_email'])) {
+                         <?php
+                        if (isset($_SESSION['email'])) {
                             $userLink = "profile.php";
                             $userTitle = "Perfil";
                         } else {
-                            $userLink = "login-page.php";
+                            $userLink = "app.php";
                             $userTitle = "Login";
                         }
                         ?>
                         <a href="<?php echo $userLink; ?>" class="icon-button">
                             <img src="../../model/imgs/usuario.png" alt="usuario" title="<?php echo $userTitle; ?>">
                         </a>
-                        <a href="src/view/pages/carrinho.php" class="icon-button">
+                        <a href="carrinho.php" class="icon-button">
                             <img src="../../model/imgs/carrinho.avif">
                         </a>
                     </div>

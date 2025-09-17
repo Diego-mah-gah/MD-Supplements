@@ -1,35 +1,33 @@
 <?php
 session_start();
-
-// Centraliza a conexão com o banco de dados para reutilização
 function conectarBanco() {
     $host = 'localhost';
-    $usuario = 'root'; // Altere conforme seu usuário do MySQL
-    $senha = '';     // Altere conforme sua senha do MySQL
+    $usuario = 'root';
+    $senha = '';
     $banco = 'mdsupplements'; 
 
     $conn = new mysqli($host, $usuario, $senha, $banco);
 
     if ($conn->connect_error) {
-        // Encerra a execução e exibe o erro em caso de falha na conexão
         die("Falha na conexão: " . $conn->connect_error);
     }
     return $conn;
 }
 
-// Lógica de login e cadastro centralizada
 $mensagem = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = isset($_POST['acao']) ? $_POST['acao'] : '';
     $email = isset($_POST['email']) ? $_POST['email'] : '';
     $senha = isset($_POST['senha']) ? $_POST['senha'] : '';
-    $nome = isset($_POST['nome']) ? $_POST['nome'] : ''; // Campo nome para cadastro
+    $nome = isset($_POST['nome']) ? $_POST['nome'] : '';
+    $endereco = isset($_POST['endereco']) ? $_POST['endereco'] : '';
+    $telefone = isset($_POST['telefone']) ? $_POST['telefone'] : '';
     
     $conn = conectarBanco();
 
     switch ($acao) {
         case 'cadastro':
-            if (empty($email) || empty($senha) || empty($nome)) {
+            if (empty($email) || empty($senha) || empty($nome) || empty($endereco) || empty($telefone)) {
                 $mensagem = "Por favor, preencha todos os campos.";
             } else {
                 $sql = "SELECT id_usuario FROM usuario WHERE email = ?";
@@ -42,9 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $mensagem = "Erro: Este email já está cadastrado.";
                 } else {
                     $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-                    $sql_insert = "INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)";
+                    $sql_insert = "INSERT INTO usuario (nome, email, senha, endereco, telefone) VALUES (?, ?, ?, ?, ?)";
                     $stmt_insert = $conn->prepare($sql_insert);
-                    $stmt_insert->bind_param("sss", $nome, $email, $senha_hash);
+                    $stmt_insert->bind_param("sssss", $nome, $email, $senha_hash, $endereco, $telefone);
                     
                     if ($stmt_insert->execute()) {
                         $mensagem = "Sucesso: Cadastro realizado! Agora você pode fazer login.";
@@ -95,11 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conn->close();
 }
 
-// Verifica se o usuário está logado para exibir o perfil
 $is_logged_in = isset($_SESSION['usuario_id']);
 $nome_usuario = $is_logged_in ? ($_SESSION['usuario_nome'] ?? '') : '';
 $email_usuario = $is_logged_in ? ($_SESSION['usuario_email'] ?? '') : '';
-$endereco_usuario = 'Não informado';
+$endereco_usuario = $is_logged_in ? ($_SESSION['usuario_endereco'] ?? '') : '';
 
 if ($is_logged_in) {
     $conn = conectarBanco();
@@ -200,6 +197,14 @@ if ($is_logged_in) {
                         <div class="mb-3">
                             <label for="cadastro-senha" class="form-label">Senha</label>
                             <input type="password" class="form-control" id="cadastro-senha" name="senha" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cadastro-endereco" class="form-label">Endereço</label>
+                            <input type="text" class="form-control" id="cadastro-endereco" name="endereco" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cadastro-telefone" class="form-label">Telefone</label>
+                            <input type="text" class="form-control" id="cadastro-telefone" name="telefone" required>
                         </div>
                         <button type="submit" class="btn btn-success w-100">Cadastrar</button>
                     </form>

@@ -34,7 +34,7 @@ session_start();
         <button onclick="switchMainBarVisibility()" class="mainBarButton mobile-only">
             <img src="src/model/imgs/menu.svg" alt="Menu" class="menu-icon">
         </button>
-        <header class="header" id="navbar">
+        <header class="header header-container" id="navbar">
             <div id="mainContainer">
                 <div id="globalContainer">
                     <div class="left-header desktop-only">
@@ -42,14 +42,14 @@ session_start();
                             <img src="src/model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
                         </a>
                     </div>
-                    <div class="search-box desktop-only" >
+                    <div class="search-box desktop-only">
                         <input type="text" id="searchInput" name="search" placeholder="O que você está procurando?" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                         <button type="submit" onclick="searchProduct(document.getElementById('searchInput').value); return false;"><img src="src/model/imgs/icon-search.gif" alt="search icon"></button>
                         <div id="resultSearch"></div>
                     </div>
                     <div class="cart-shop desktop-only">
                         <?php
-                        if (isset($_SESSION['email'])) {
+                        if (isset($_SESSION['usuario_email'])) {
                             $userLink = "src/view/pages/profile.php";
                             $userTitle = "Perfil";
                         } else {
@@ -81,8 +81,6 @@ session_start();
             </div>
         </nav>
     </div>
-
-
 
     <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -163,24 +161,7 @@ session_start();
 
         <?php
         include 'src/view/produtos.php';
-
-        if (isset($_GET['id']) && $_GET['id'] == 'produtos') {
-            include 'src/view/produtos.php';
-            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
-                $produto_nome = $_POST['produto_nome'];
-                foreach ($produtos as $produto) {
-                    if ($produto['nome'] === $produto_nome) {
-                        $_SESSION['carrinho'][] = $produto;
-                        break;
-                    }
-                }
-                // Redireciona para o carrinho se solicitado
-                if (isset($_GET['redirect']) && $_GET['redirect'] === 'carrinho') {
-                    header('Location: src/view/pages/carrinho.php');
-                    exit();
-                }
-            }
-        }
+        require_once 'src/view/carrinho_db.php';
 
         $paginas_validas = ['home', 'creatina', 'whey', 'pre-treino', 'emagrecedor', 'carrinho', 'login', 'cadastro', 'sobre', 'contato', 'produtos'];
         $pagina = "src/view/{$param}.php";
@@ -245,7 +226,7 @@ session_start();
 
     </footer>
 
-    <script src="src/controller/scripts/index.js"></script>
+    <script src="src/scripts/index.js"></script>
 
 </body>
 

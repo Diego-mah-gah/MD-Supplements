@@ -16,7 +16,7 @@
     <div class="map-container" style="width:100%; max-width:400px; margin: 30px auto 0 auto;">
         <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.879123456789!2d-46.65657468440636!3d-23.58108396877439!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce59c8b1b1b1b1%3A0x123456789abcdef!2sAv.%20Paulista%2C%20S%C3%A3o%20Paulo%20-%20SP!5e0!3m2!1spt-BR!2sbr!4v1719432000000!5m2!1spt-BR!2sbr"
-            width="100%" height="100%" style="border:0; border-radius:10px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            width="800px" height="100%" style="border:0; border-radius:10px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 </div>
 

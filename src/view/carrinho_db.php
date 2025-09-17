@@ -1,12 +1,10 @@
 <?php
 
-// carrinho_db.php - Funções para manipulação do carrinho no banco de dados
-
 function conectarBanco() {
     $host = 'localhost';
     $usuario = 'root';
     $senha = '';
-    $banco = 'mdsupplements'; 
+    $banco = 'mdsupplements';
 
     $conn = new mysqli($host, $usuario, $senha, $banco);
 
@@ -16,11 +14,9 @@ function conectarBanco() {
     return $conn;
 }
 
-// Cria a tabela carrinho 
 function criarTabelaCarrinho() {
     $conn = conectarBanco();
     $sql = "CREATE TABLE IF NOT EXISTS carrinho (
-        id INT AUTO_INCREMENT PRIMARY KEY, /*chave primária */
         usuario_id INT NOT NULL,
         produto_id INT NOT NULL,
         quantidade INT NOT NULL DEFAULT 1,
@@ -32,14 +28,40 @@ function criarTabelaCarrinho() {
     $conn->close();
 }
 
-// Busca todos os itens do carrinho junto com os dados do usuário e do produto
+function adicionarProdutoAoCarrinho($usuario_id, $produto_id) {
+    $conn = conectarBanco();
+
+    $sql = "SELECT quantidade FROM carrinho WHERE usuario_id = ? AND produto_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $usuario_id, $produto_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $sql_update = "UPDATE carrinho SET quantidade = quantidade + 1 WHERE usuario_id = ? AND produto_id = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("ii", $usuario_id, $produto_id);
+        $stmt_update->execute();
+        $stmt_update->close();
+    } else {
+        $sql_insert = "INSERT INTO carrinho (usuario_id, produto_id, quantidade) VALUES (?, ?, 1)";
+        $stmt_insert = $conn->prepare($sql_insert);
+        $stmt_insert->bind_param("ii", $usuario_id, $produto_id);
+        $stmt_insert->execute();
+        $stmt_insert->close();
+    }
+
+    $stmt->close();
+    $conn->close();
+}
+
 function obterCarrinhoCompleto($id_usuario) {
     $conn = conectarBanco();
 
     $sql = "SELECT 
                 u.id_usuario, u.nome AS usuario_nome, u.email AS usuario_email, u.endereco AS usuario_endereco, u.telefone AS usuario_telefone,
-                c.id AS carrinho_id, c.quantidade, c.data_adicionado,
-                p.id AS produto_id, p.nome AS produto_nome, p.preco AS produto_preco, p.descricao AS produto_descricao, p.imagem AS produto_imagem
+                p.id, p.nome AS produto_nome, p.preco AS produto_preco, p.descricao AS produto_descricao, p.imagem AS produto_imagem,
+                c.quantidade
             FROM carrinho c
             JOIN usuario u ON c.usuario_id = u.id_usuario
             JOIN produtos p ON c.produto_id = p.id
@@ -85,12 +107,13 @@ function obterItensCarrinho($id_usuario) {
 function carrinhoVazio($id_usuario) {
     $conn = conectarBanco();
 
-    $sql = "SELECT COUNT(*) as total FROM carrinho WHERE usuario_id = ?";
+    $sql = "SELECT count(*) AS total FROM carrinho WHERE usuario_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id_usuario);
     $stmt->execute();
-    $stmt->bind_result($total);
-    $stmt->fetch();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $total = $row['total'];
 
     $stmt->close();
     $conn->close();
@@ -98,7 +121,12 @@ function carrinhoVazio($id_usuario) {
     return $total == 0;
 }
 
-// Chame esta função uma vez para garantir que a tabela existe
-criarTabelaCarrinho();
-
-?>
+function removerProdutoDoCarrinho($id_usuario, $produto_id) {
+    $conn = conectarBanco();
+    $sql = "DELETE FROM carrinho WHERE id_usuario = ? AND produto_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $id_usuario, $produto_id);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+}

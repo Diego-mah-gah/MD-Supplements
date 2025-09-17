@@ -396,9 +396,6 @@ footer {
   z-index: 2;
 }
 
-/*# sourceMappingURL=style.css.map */
-
-/* Alinhamento dos produtos lado a lado */
 .produtos-grid {
   display: flex;
   flex-wrap: wrap;
@@ -416,4 +413,26 @@ footer {
   flex-direction: column;
   align-items: center;
   margin-bottom: 24px;
+  overflow: hidden;
+  a {
+    text-decoration: none;
+    color: inherit;
+    display:block;
+  }
+}
+
+.btn-danger {
+  color:red;
+}
+.produto-card img {
+  max-width: 120px;
+  max-height: 120px;
+  object-fit: contain;
+  margin-bottom: 12px;
+}
+
+
+.produto-card:hover img {
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
 }
