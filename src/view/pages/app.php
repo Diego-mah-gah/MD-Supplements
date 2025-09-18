@@ -46,6 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     if ($stmt_insert->execute()) {
                         $mensagem = "Sucesso: Cadastro realizado! Agora você pode fazer login.";
+                        // Aguarda 3 segundos antes de redirecionar
+                        sleep(3);
+                        header("Location: ../../../index.php");
                     } else {
                         $mensagem = "Erro ao cadastrar: " . $conn->error;
                     }
@@ -74,6 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_SESSION['usuario_nome'] = $nome;
                         $_SESSION['usuario_email'] = $email;
                         $mensagem = "Sucesso: Login realizado!";
+                        echo $mensagem;
+                        echo "Redirecionando...";
+                        sleep(2);
+                        header("Location: ../../../index.php");
                     } else {
                         $mensagem = "Erro: Senha incorreta.";
                     }
@@ -138,23 +145,6 @@ if ($is_logged_in) {
             <p class="mensagem <?php echo strpos($mensagem, 'Sucesso') !== false ? 'sucesso' : 'erro'; ?>"><?php echo htmlspecialchars($mensagem); ?></p>
         <?php endif; ?>
 
-        <?php if ($is_logged_in): ?>
-            <!-- Conteúdo da página de perfil -->
-            <div class="card p-4">
-                <h2 class="mb-4 text-center">Perfil do Usuário</h2>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><strong>Nome:</strong> <?php echo htmlspecialchars($nome_usuario); ?></li>
-                    <li class="list-group-item"><strong>E-mail:</strong> <?php echo htmlspecialchars($email_usuario); ?></li>
-                    <li class="list-group-item"><strong>Endereço:</strong> <?php echo htmlspecialchars($endereco_usuario); ?></li>
-                </ul>
-                <div class="d-grid gap-2">
-                    <form action="app.php" method="POST">
-                        <input type="hidden" name="acao" value="logout">
-                        <button type="submit" class="btn btn-danger w-100 mt-3">Sair</button>
-                    </form>
-                </div>
-            </div>
-        <?php else: ?>
             <!-- Conteúdo da página de login e cadastro -->
             <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -210,7 +200,7 @@ if ($is_logged_in) {
                     </form>
                 </div>
             </div>
-        <?php endif; ?>
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>

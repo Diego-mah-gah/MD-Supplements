@@ -54,14 +54,14 @@ session_start();
                             $userLink = "profile.php";
                             $userTitle = "Perfil";
                         } else {
-                            $userLink = "login-page.php";
+                            $userLink = "app.php";
                             $userTitle = "Login";
                         }
                         ?>
                         <a href="<?php echo $userLink; ?>" class="icon-button">
                             <img src="../../model/imgs/usuario.png" alt="usuario" title="<?php echo $userTitle; ?>">
                         </a>
-                        <a href="src/view/pages/carrinho.php" class="icon-button">
+                        <a href="carrinho.php" class="icon-button">
                             <img src="../../model/imgs/carrinho.avif">
                         </a>
                     </div>
@@ -124,23 +124,6 @@ session_start();
                             </div>
                         </div>
                     </div>
-                    <button type='submit' name='add_to_cart' class='btn btn-primary' onclick='showMessage();'>Adicionar ao Carrinho</button>
-                    <script>
-                        function showMessage() {
-                            let msg = document.createElement('div');
-                            msg.textContent = 'Produto adicionado ao carrinho!';
-                            msg.style.position = 'fixed';
-                            msg.style.top = '20px';
-                            msg.style.right = '20px';
-                            msg.style.background = '#28a745';
-                            msg.style.color = '#fff';
-                            msg.style.padding = '10px 20px';
-                            msg.style.borderRadius = '5px';
-                            msg.style.zIndex = 9999;
-                            document.body.appendChild(msg);
-                            setTimeout(() => msg.remove(), 7000);
-                        }
-                    </script>
                     </form>
                 </div>
             </div>

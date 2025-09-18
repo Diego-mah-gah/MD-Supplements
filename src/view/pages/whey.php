@@ -30,11 +30,11 @@ session_start();
 </head>
 
 <body>
-    <div id="mainBar">
+<div id="mainBar">
         <button onclick="switchMainBarVisibility()" class="mainBarButton mobile-only">
             <img src="../../model/imgs/menu.svg" alt="Menu" class="menu-icon">
         </button>
-        <header class="header" id="navbar">
+        <header class="header header-container" id="navbar">
             <div id="mainContainer">
                 <div id="globalContainer">
                     <div class="left-header desktop-only">
@@ -48,8 +48,8 @@ session_start();
                         <div id="resultSearch"></div>
                     </div>
                     <div class="cart-shop desktop-only">
-                         <?php
-                        if (isset($_SESSION['email'])) {
+                        <?php
+                        if (isset($_SESSION['usuario_email'])) {
                             $userLink = "profile.php";
                             $userTitle = "Perfil";
                         } else {
@@ -70,15 +70,14 @@ session_start();
         <!-- NavBar para mobile -->
         <nav id="sideNav" class="mobile-only">
             <ul>
-                <li><a href="../../../index.php">Início</a></li>
                 <li><a href="<?php echo $userLink; ?>">Perfil</a></li>
-                <li><a href="carrinho.php">Carrinho</a></li>
+                <li><a href="src/view/pages/carrinho.php">Carrinho</a></li>
                 <li><a href="https://wa.me/44999649804?text=Olá, gostaria de tirar uma dúvida. Poderia me ajudar por favor?" target="_blank" class="whatsapp-nav">Fale Conosco</a></li>
                 <li><a href="#" onclick="showSearchInputMobile();return false;">Pesquisar</a></li>
             </ul>
             <div id="mobileSearchBox" style="display:none; padding:10px;">
                 <input type="text" id="mobileSearchInput" name="search" placeholder="O que você está procurando?" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                <button type="submit" onclick="searchProduct(document.getElementById('mobileSearchInput').value); return false;">Buscar</button>
+                <button type="submit" onclick="searchProduct(document.getElementById('mobileSearchInput').value); return false;" style="border:none; background-color:blueviolet; color:white; width:50%; height:70%;">Buscar</button>
             </div>
         </nav>
     </div>
@@ -124,23 +123,6 @@ session_start();
                             </div>
                         </div>
                     </div>
-                    <button type='submit' name='add_to_cart' class='btn btn-primary' onclick='showMessage();'>Adicionar ao Carrinho</button>
-                    <script>
-                        function showMessage() {
-                            let msg = document.createElement('div');
-                            msg.textContent = 'Produto adicionado ao carrinho!';
-                            msg.style.position = 'fixed';
-                            msg.style.top = '20px';
-                            msg.style.right = '20px';
-                            msg.style.background = '#28a745';
-                            msg.style.color = '#fff';
-                            msg.style.padding = '10px 20px';
-                            msg.style.borderRadius = '5px';
-                            msg.style.zIndex = 9999;
-                            document.body.appendChild(msg);
-                            setTimeout(() => msg.remove(), 7000);
-                        }
-                    </script>
                     </form>
                 </div>
             </div>

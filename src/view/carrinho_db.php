@@ -59,9 +59,13 @@ function obterCarrinhoCompleto($id_usuario) {
     $conn = conectarBanco();
 
     $sql = "SELECT 
-                u.id_usuario, u.nome AS usuario_nome, u.email AS usuario_email, u.endereco AS usuario_endereco, u.telefone AS usuario_telefone,
-                p.id, p.nome AS produto_nome, p.preco AS produto_preco, p.descricao AS produto_descricao, p.imagem AS produto_imagem,
-                c.quantidade
+                u.id_usuario, u.nome AS usuario_nome, 
+                c.quantidade,
+                p.id AS produto_id,
+                p.nome AS produto_nome,
+                p.preco AS produto_preco,
+                p.descricao AS produto_descricao,
+                p.imagem AS produto_imagem
             FROM carrinho c
             JOIN usuario u ON c.usuario_id = u.id_usuario
             JOIN produtos p ON c.produto_id = p.id
@@ -104,29 +108,31 @@ function obterItensCarrinho($id_usuario) {
     return $itens;
 }
 
+function removerProdutoDoCarrinho($id_usuario, $id_produto) {
+    $conn = conectarBanco();
+    $sql = "DELETE FROM carrinho WHERE usuario_id = ? AND produto_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ii", $id_usuario, $id_produto);
+    $result = $stmt->execute();
+    
+    $success = ($stmt->affected_rows > 0);
+
+    $stmt->close();
+    $conn->close();
+
+    return $success;
+}
+
+// Verifica se o carrinho está vazio
 function carrinhoVazio($id_usuario) {
     $conn = conectarBanco();
-
-    $sql = "SELECT count(*) AS total FROM carrinho WHERE usuario_id = ?";
+    $sql = "SELECT COUNT(*) FROM carrinho WHERE usuario_id = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id_usuario);
     $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    $total = $row['total'];
-
+    $stmt->bind_result($count);
+    $stmt->fetch();
     $stmt->close();
     $conn->close();
-
-    return $total == 0;
-}
-
-function removerProdutoDoCarrinho($id_usuario, $produto_id) {
-    $conn = conectarBanco();
-    $sql = "DELETE FROM carrinho WHERE id_usuario = ? AND produto_id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ii", $id_usuario, $produto_id);
-    $stmt->execute();
-    $stmt->close();
-    $conn->close();
+    return $count == 0;
 }

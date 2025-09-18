@@ -1,9 +1,17 @@
 <?php
 session_start();
-require_once __DIR__ . '/../carrinho_db.php';
+require_once  '../carrinho_db.php';
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['acao'] === 'remover') {
-    if (isset($_SESSION['usuario_email']) && isset($_POST['produto_id'])) {
+    if (!isset($_SESSION['usuario_email'])) {
+        $_SESSION['mensagem_carrinho'] = "Erro: Usuário não está logado.";
+    }
+    else if (!isset($_POST['produto_id'])) {
+        $_SESSION['mensagem_carrinho'] = "Erro: ID do produto não foi enviado.";
+    } else {
         $id_usuario = null;
         $conn = conectarBanco();
         $email = $_SESSION['usuario_email'];
@@ -12,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
+
         if ($row = $result->fetch_assoc()) {
             $id_usuario = $row['id_usuario'];
         }
@@ -19,13 +28,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
         $conn->close();
 
         if ($id_usuario) {
-            removerProdutoDoCarrinho($id_usuario, $_POST['produto_id']);
-            header("Location: carrinho.php"); // Recarrega a página para atualizar o carrinho
-            exit();
+            if (removerProdutoDoCarrinho($id_usuario, $_POST['produto_id'])) {
+                $_SESSION['mensagem_carrinho'] = "Produto removido com sucesso.";
+                $item = $item - 1;
+            } else {
+                $_SESSION['mensagem_carrinho'] = "Erro: Produto não encontrado ou não foi possível remover.";
+            }
+        } else {
+            $_SESSION['mensagem_carrinho'] = "Erro: Não foi possível identificar o usuário.";
         }
     }
+    header("Location: carrinho.php");
+    exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -75,9 +90,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
         </div>
     </header>
 
-     <main class="container mt-5">
+    <main class="container mt-5">
         <h2>Seu Carrinho</h2>
         <?php
+        if (isset($_SESSION['mensagem_carrinho'])) {
+            echo "<div class='alert alert-info'>{$_SESSION['mensagem_carrinho']}</div>";
+            unset($_SESSION['mensagem_carrinho']);
+        }
+
         $id_usuario = null;
         if (isset($_SESSION['usuario_email'])) {
             $conn = conectarBanco();
@@ -103,7 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
                     <thead>
                         <tr>
                             <th scope="col">Produto</th>
-                            <th scope="col">Nome</th>
                             <th scope="col">Preço</th>
                             <th scope="col">Quantidade</th>
                             <th scope="col">Subtotal</th>
@@ -116,9 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
                             $total += $subtotal;
                         ?>
                             <tr>
-                                <td>
-                                    <img src="../model/imgs/<?php echo htmlspecialchars($item['produto_imagem']); ?>" alt="Imagem do Produto" style="width: 50px; height: auto;">
-                                </td>
                                 <td><?php echo htmlspecialchars($item['produto_nome']); ?></td>
                                 <td>R$ <?php echo number_format($item['produto_preco'], 2, ',', '.'); ?></td>
                                 <td><?php echo htmlspecialchars($item['quantidade']); ?></td>
@@ -126,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
                                 <td>
                                     <form method="POST" action="carrinho.php">
                                         <input type="hidden" name="acao" value="remover">
-                                        <input type="hidden" name="produto_id" value="<?php echo htmlspecialchars($item['produto_id']); ?>">
+                                        <input type="hidden" name="produto_id" value="<?php echo htmlspecialchars((string)($item['produto_id'] ?? '')); ?>">
                                         <button type="submit" class="btn btn-danger btn-sm">
                                             <i class="fas fa-trash-alt"></i> Remover
                                         </button>
@@ -150,5 +166,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
         ?>
     </main>
 </body>
+<script src="../../model/script/script.js"></script>
 
 </html>
