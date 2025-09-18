@@ -123,7 +123,6 @@ function removerProdutoDoCarrinho($id_usuario, $id_produto) {
     return $success;
 }
 
-// Verifica se o carrinho está vazio
 function carrinhoVazio($id_usuario) {
     $conn = conectarBanco();
     $sql = "SELECT COUNT(*) FROM carrinho WHERE usuario_id = ?";

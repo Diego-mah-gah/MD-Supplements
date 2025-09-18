@@ -192,7 +192,7 @@ session_start();
 
     </footer>
 
-    <script src="../../controller/scripts/index.js"></script>
+    <script src="../../scripts/index.js"></script>
 </body>
 
 </html>

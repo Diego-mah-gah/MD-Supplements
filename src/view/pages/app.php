@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     if ($stmt_insert->execute()) {
                         $mensagem = "Sucesso: Cadastro realizado! Agora você pode fazer login.";
-                        // Aguarda 3 segundos antes de redirecionar
+                        // Irá aguardar 3 segundos antes de redirecionar
                         sleep(3);
                         header("Location: ../../../index.php");
                     } else {
@@ -127,6 +127,8 @@ if ($is_logged_in) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>M&D Supplements</title>
+    <link rel="stylesheet" href="../../model/style/style.css">
+    <link rel="shortcut icon" href="../../model/imgs/MD-LOGO.avif">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background-color: #f8f9fa; }

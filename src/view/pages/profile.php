@@ -41,58 +41,53 @@ if ($conn->connect_error) {
 
 <body>
     <header class="header" id="navbar">
-           <div id="mainBar">
-        <button onclick="switchMainBarVisibility()" class="mainBarButton mobile-only">
-            <img src="../../model/imgs/menu.svg" alt="Menu" class="menu-icon">
-        </button>
-        <header class="header header-container" id="navbar">
-            <div id="mainContainer">
-                <div id="globalContainer">
-                    <div class="left-header desktop-only">
-                        <a href="../../../index.php" id="home">
-                            <img src="../../model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
-                        </a>
-                    </div>
-                    <div class="search-box desktop-only">
-                        <input type="text" id="searchInput" name="search" placeholder="O que você está procurando?" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                        <button type="submit" onclick="searchProduct(document.getElementById('searchInput').value); return false;"><img src="../../model/imgs/icon-search.gif" alt="search icon"></button>
-                        <div id="resultSearch"></div>
-                    </div>
-                    <div class="cart-shop desktop-only">
-                        <?php
-                        if (isset($_SESSION['usuario_email'])) {
-                            $userLink = "profile.php";
-                            $userTitle = "Perfil";
-                        } else {
-                            $userLink = "app.php";
-                            $userTitle = "Login";
-                        }
-                        ?>
-                        <a href="<?php echo $userLink; ?>" class="icon-button">
-                            <img src="../../model/imgs/usuario.png" alt="usuario" title="<?php echo $userTitle; ?>">
-                        </a>
-                        <a href="carrinho.php" class="icon-button">
-                            <img src="../../model/imgs/carrinho.avif">
-                        </a>
+        <div id="mainBar">
+            <button onclick="switchMainBarVisibility()" class="mainBarButton mobile-only" style="border:none; background:none; padding:10px; margin-right:-180px;">
+                <img src="../../model/imgs/menu.svg" alt="Menu" class="menu-icon">
+            </button>
+            <header class="header header-container" id="navbar">
+                <div id="mainContainer">
+                    <div id="globalContainer">
+                        <div class="left-header desktop-only">
+                            <a href="../../../index.php" id="home" style="margin-left:-400px;">
+                                <img src="../../model/imgs/MD-LOGO.avif" alt="M&D Logo" class="text-center">
+                            </a>
+                        </div>
+                        <div class="cart-shop desktop-only">
+                            <?php
+                            if (isset($_SESSION['usuario_email'])) {
+                                $userLink = "profile.php";
+                                $userTitle = "Perfil";
+                            } else {
+                                $userLink = "app.php";
+                                $userTitle = "Login";
+                            }
+                            ?>
+                            <a href="<?php echo $userLink; ?>" class="icon-button">
+                                <img src="../../model/imgs/usuario.png" alt="usuario" title="<?php echo $userTitle; ?>">
+                            </a>
+                            <a href="carrinho.php" class="icon-button">
+                                <img src="../../model/imgs/carrinho.avif">
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
-        <!-- NavBar para mobile -->
-        <nav id="sideNav" class="mobile-only">
-            <ul>
-                <li><a href="<?php echo $userLink; ?>">Perfil</a></li>
-                <li><a href="src/view/pages/carrinho.php">Carrinho</a></li>
-                <li><a href="https://wa.me/44999649804?text=Olá, gostaria de tirar uma dúvida. Poderia me ajudar por favor?" target="_blank" class="whatsapp-nav">Fale Conosco</a></li>
-                <li><a href="#" onclick="showSearchInputMobile();return false;">Pesquisar</a></li>
-            </ul>
-            <div id="mobileSearchBox" style="display:none; padding:10px;">
-                <input type="text" id="mobileSearchInput" name="search" placeholder="O que você está procurando?" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
-                <button type="submit" onclick="searchProduct(document.getElementById('mobileSearchInput').value); return false;" style="border:none; background-color:blueviolet; color:white; width:50%; height:70%;">Buscar</button>
-            </div>
-        </nav>
-    </div>
-        </header>
+            </header>
+            <!-- NavBar para mobile -->
+            <nav id="sideNav" class="mobile-only">
+                <ul>
+                    <li><a href="<?php echo $userLink; ?>">Perfil</a></li>
+                    <li><a href="carrinho.php">Carrinho</a></li>
+                    <li><a href="https://wa.me/44999649804?text=Olá, gostaria de tirar uma dúvida. Poderia me ajudar por favor?" target="_blank" class="whatsapp-nav">Fale Conosco</a></li>
+                    <li><a href="#" onclick="showSearchInputMobile();return false;">Pesquisar</a></li>
+                </ul>
+                <div id="mobileSearchBox" style="display:none; padding:10px;">
+                    <input type="text" id="mobileSearchInput" name="search" placeholder="O que você está procurando?" value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <button type="submit" onclick="searchProduct(document.getElementById('mobileSearchInput').value); return false;" style="border:none; background-color:blueviolet; color:white; width:50%; height:70%;">Buscar</button>
+                </div>
+            </nav>
+        </div>
+    </header>
 
     <!------------------ Entrar em conversa whatsapp----------------->
 
@@ -127,11 +122,11 @@ if ($conn->connect_error) {
                 <li class="list-group-item"><strong>Endereço:</strong> <?php echo htmlspecialchars($endereco); ?></li>
                 <li class="list-group-item"><strong>Senha:</strong> ********</li>
             </ul>
-<div>
-    <form action="logout.php">
-        <button type="submit" class="btn btn-danger">Sair</button>
-    </form>
-</div>
+            <div>
+                <form action="logout.php">
+                    <button type="submit" class="btn btn-danger">Sair</button>
+                </form>
+            </div>
         </div>
     <?php
     } else {
@@ -164,8 +159,8 @@ if ($conn->connect_error) {
     echo "<div class='container mt-3'>";
     echo "<div class='container-fluid text-center' style:='font-size: 30px; font-weight: Arial;'>";
     echo $welcome->saudar();
-    echo "</div>";  
-    echo "</div>"; 
-    
+    echo "</div>";
+    echo "</div>";
+
     ?>
-    <script src="../../model/js/script.js"></script>
+    <script src="../../scripts/index.js"></script>
